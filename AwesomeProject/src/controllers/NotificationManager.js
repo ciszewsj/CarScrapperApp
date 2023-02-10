@@ -2,16 +2,16 @@ import { useEffect } from "react";
 import messaging from "@react-native-firebase/messaging";
 import { Alert } from "react-native";
 
-let NotificationManager = () => {
+let NotificationManager = ({ setToken }) => {
 
 
   useEffect(() => {
-    let token = messaging().getToken().then(
+    messaging().getToken().then(
       obj => {
         console.log("FCM : ", obj);
+        setToken(obj);
       },
     );
-
 
     // messaging().setBackgroundMessageHandler(
     messaging().onMessage(
