@@ -1,6 +1,20 @@
 import { Text, TextInput, View } from "react-native";
+import { useEffect } from "react";
 
-let ConfigBetweenValues = ({ title }) => {
+let ConfigBetweenValues = ({ title, minHook, maxHook }) => {
+  let min, max = 0;
+  let setMin, setMax;
+  if (minHook) {
+    [min, setMin] = minHook;
+  }
+  if (maxHook) {
+    [max, setMax] = maxHook;
+  }
+
+  useEffect(() => {
+
+  }, [min, max]);
+
   return (
     <View>
       <Text numberOfLines={1} style={{ fontSize: 16 }}>{title}</Text>
@@ -17,7 +31,10 @@ let ConfigBetweenValues = ({ title }) => {
             borderRadius: 10,
             padding: 10,
             flex: 1,
-          }}>
+          }}
+          defaultValue={min}
+          onChangeText={setMin}
+        >
         </TextInput>
         <Text style={{
           fontSize: 24,
@@ -33,7 +50,10 @@ let ConfigBetweenValues = ({ title }) => {
             borderRadius: 10,
             padding: 10,
             flex: 1,
-          }}>
+          }}
+          defaultValue={max}
+          onChangeText={setMax}
+        >
         </TextInput>
       </View>
     </View>

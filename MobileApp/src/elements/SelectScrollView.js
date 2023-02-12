@@ -1,13 +1,13 @@
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import ConfigText from "./config/ConfigText";
 import { Fragment, useEffect, useState } from "react";
-import AppButton from "./AppButton";
+import AppButton from "./buttons/AppButton";
 import ConfigScrollItem from "./config/ConfigScrollItem";
 
 let SelectScrollView = ({ itemList, selectedItemsHook, back }) => {
   let [selectedItems, setSelectedItems] = selectedItemsHook;
   let [itemListState, setItemListState] = useState(itemList);
-
+  console.log(selectedItems);
   let [itemName, setItemName] = useState("");
 
   useEffect(() => {
@@ -23,7 +23,9 @@ let SelectScrollView = ({ itemList, selectedItemsHook, back }) => {
   }, [selectedItems]);
 
   let onPressAction = (item) => {
-    if (!selectedItems.includes(item)) {
+    if (!selectedItems) {
+      setSelectedItems([item]);
+    } else if (!selectedItems.includes(item)) {
       setSelectedItems([...selectedItems, item]);
     } else {
       setSelectedItems([...
@@ -44,7 +46,7 @@ let SelectScrollView = ({ itemList, selectedItemsHook, back }) => {
               if (name.toUpperCase().includes(itemName.toUpperCase()))
                 return <Fragment key={index}>
                   <ConfigScrollItem
-                    selected={selectedItems.includes(name)}
+                    selected={selectedItems && selectedItems.includes(name)}
                     name={name}
                     onPress={() =>
                       onPressAction(name)

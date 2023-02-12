@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import CarScrapperOptionsScreen from "./CarScrapperOptionsScreen";
-import CarScrapperEditOptionsScreen from "./CarScrapperEditOptionsScreen";
+import CarScrapperOptionsScreen from "../fragments/CarScrapperOptionsScreen";
+import CarScrapperEditOptionsScreen from "../fragments/CarScrapperEditOptionsScreen";
 
 let CarScrapperOptionsTst = () => {
   const Stack = createStackNavigator();
