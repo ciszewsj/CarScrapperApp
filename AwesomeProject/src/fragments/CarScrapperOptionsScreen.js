@@ -6,16 +6,7 @@ let CarScrapperOptionsScreen = ({ navigation }) => {
   return (
     <View>
       <ScrollView>
-        <View style={{
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 10,
-        }}>
-          <AppButton title={"Utwórz nowy"} />
-        </View>
-        <SettingsLabel onPress={e => {
-          navigation.navigate("Edytuj");
-        }} />
+        <SettingsLabel />
         <SettingsLabel />
         <SettingsLabel />
         <SettingsLabel />
@@ -23,6 +14,19 @@ let CarScrapperOptionsScreen = ({ navigation }) => {
         <SettingsLabel />
         <SettingsLabel />
       </ScrollView>
+      <View style={{
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 10,
+        position: "absolute",
+        right: 10,
+        bottom: 10,
+        opacity: 0.5,
+      }}>
+        <AppButton title={"+"} onPress={e => {
+          navigation.navigate("Edytuj");
+        }} />
+      </View>
     </View>
   );
 };
