@@ -27,11 +27,8 @@ public class AccountController {
 	@PostMapping("/register")
 	public void register(@RequestBody @Validated RegisterRequest request, @AuthenticationPrincipal Jwt jwt, @AuthenticationPrincipal Principal principal) throws FirebaseAuthException {
 
-//		AbstractAuthenticationToken a = jwt;
 		log.info("jwt {}", jwt);
 		log.info("principal {}", principal);
-//		log.info(principal.getName() + " ");
-//		log.info(authentication.getPrincipal().toString());
 	}
 
 	@PostMapping("/change")
