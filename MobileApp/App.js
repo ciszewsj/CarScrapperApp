@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { GlobalUserContext, globalUsersSettings } from "./src/context/GlobalUserContext";
 import messaging from "@react-native-firebase/messaging";
 import { Alert } from "react-native";
+import LoginScreen from "./src/authorization/LoginScreen";
 
 
 export default function App() {
@@ -32,7 +33,9 @@ export default function App() {
 
   return (
     <GlobalUserContext.Provider value={[globalContext, setGlobalContext]}>
-      <MainAppBottomTabNavigator />
+      {/*// <MainAppBottomTabNavigator />*/}
+      <LoginScreen>
+      </LoginScreen>
     </GlobalUserContext.Provider>
   );
 }

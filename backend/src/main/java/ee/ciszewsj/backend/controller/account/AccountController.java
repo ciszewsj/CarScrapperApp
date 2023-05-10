@@ -2,6 +2,7 @@ package ee.ciszewsj.backend.controller.account;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -26,9 +27,19 @@ public class AccountController {
 
 	@PostMapping("/register")
 	public void register(@RequestBody @Validated RegisterRequest request, @AuthenticationPrincipal Jwt jwt, @AuthenticationPrincipal Principal principal) throws FirebaseAuthException {
+		try {
+			UserRecord.CreateRequest createRequest = new UserRecord.CreateRequest();
+			createRequest.setDisabled(false);
+			createRequest.setEmailVerified(true);
+			createRequest.setEmail(request.getEmail());
+			createRequest.setPassword(request.getPassword());
+			createRequest.setDisplayName(request.getName());
+			firebaseAuth.createUser(createRequest);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IllegalStateException();
+		}
 
-		log.info("jwt {}", jwt);
-		log.info("principal {}", principal);
 	}
 
 	@PostMapping("/change")
