@@ -4,15 +4,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 @Slf4j
 @RestController
@@ -23,9 +25,12 @@ public class AccountController {
 	private final FirebaseAuth firebaseAuth;
 
 	@PostMapping("/register")
-	public void register(@RequestBody @Validated RegisterRequest request, @AuthenticationPrincipal User authentication) throws FirebaseAuthException {
-		log.error("??? {}", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		log.info(authentication.getUsername());
+	public void register(@RequestBody @Validated RegisterRequest request, @AuthenticationPrincipal Jwt jwt, @AuthenticationPrincipal Principal principal) throws FirebaseAuthException {
+
+//		AbstractAuthenticationToken a = jwt;
+		log.info("jwt {}", jwt);
+		log.info("principal {}", principal);
+//		log.info(principal.getName() + " ");
 //		log.info(authentication.getPrincipal().toString());
 	}
 
