@@ -2,16 +2,16 @@ import LinearGradient from "react-native-linear-gradient";
 import { Text, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 
-let SecondaryButton = ({ onPress }) => {
+let SecondaryButton = ({ onPress, isWidth, children }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity style={{ ...styles.button, ...(isWidth && { width: 250 }) }} onPress={onPress}>
       <LinearGradient
         colors={["#D748FB", "rgba(172, 12, 156, 0.92)"]}
         start={{ x: 0.5, y: 0.1 }}
         end={{ x: 0.5, y: 0.9 }}
         style={styles.gradient}
       >
-        <Text style={styles.buttonText}>Register</Text>
+        <Text style={styles.buttonText}>{children}</Text>
       </LinearGradient>
     </TouchableOpacity>
   );

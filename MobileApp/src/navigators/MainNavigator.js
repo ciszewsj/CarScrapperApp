@@ -23,9 +23,9 @@ let MainNavigator = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
-      tabBarOptions={{
-        activeTintColor: "#e91e63",
+      initialRouteName="Scrapped Items"
+      screenOptions={{
+        tabBarActiveTintColor: "#000000",
       }}
     >
       <Tab.Screen
@@ -46,10 +46,10 @@ let MainNavigator = () => {
 
       />
       <Tab.Screen
-        name="Home"
+        name="Scrapped Items"
         component={ItemScreen}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: "Scrapped Items",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" color={color} size={size} />
           ),

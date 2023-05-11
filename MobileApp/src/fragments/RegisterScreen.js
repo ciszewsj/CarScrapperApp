@@ -51,7 +51,9 @@ export let RegisterScreen = () => {
         flexDirection: "row",
         justifyContent: "flex-start",
       }}>
-        <SecondaryButton onPress={() => navigation.navigate("Login")} />
+        <SecondaryButton isWidth={true} onPress={() => navigation.navigate("Login")}>
+          Register
+        </SecondaryButton>
       </View>
     </Background>
 

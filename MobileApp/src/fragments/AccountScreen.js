@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 let AccountScreen = () => {
   const navigation = useNavigation();
 
+
   return (
     <Background>
       <View style={{ flex: 2, justifyContent: "center", alignContent: "center" }}>
@@ -14,14 +15,28 @@ let AccountScreen = () => {
           ScrapItem
         </Text>
       </View>
+      <View style={{ flex: 1 }} />
+
       <View style={{
-        flex: 4,
+        flex: 1,
+        justifyContent: "space-between",
         alignItems: "center",
+        paddingVertical: 20,
+        paddingHorizontal: 10,
       }}>
 
-        <SecondaryButton onPress={() => navigation.navigate("Login")} />
-        <MainButton onPress={() => navigation.navigate("Login")} />
+        <MainButton isWidth={true}>
+          Change password
+        </MainButton>
+        <SecondaryButton isWidth={true} onPress={() => navigation.reset({
+          index: 0,
+          routes: [{ name: "Login" }],
+        })}>
+          Logout
+        </SecondaryButton>
+
       </View>
+      <View style={{ flex: 2 }} />
 
     </Background>
   );

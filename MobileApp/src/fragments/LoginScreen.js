@@ -35,8 +35,15 @@ let LoginScreen = () => {
         justifyContent: "space-between",
         width: 300,
       }}>
-        <SecondaryButton onPress={() => navigation.navigate("Register")} />
-        <MainButton onPress={() => navigation.navigate("Main")} />
+        <SecondaryButton onPress={() => navigation.navigate("Register")}>
+          Register
+        </SecondaryButton>
+        <MainButton onPress={() => navigation.reset({
+          index: 0,
+          routes: [{ name: "Main" }],
+        })}>
+          Login
+        </MainButton>
       </View>
     </Background>
 

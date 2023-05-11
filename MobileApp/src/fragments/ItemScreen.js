@@ -1,6 +1,8 @@
 import { Background } from "../elements/Background";
 import { ScrollView } from "react-native";
 import ItemLabel from "../elements/ItemLabel";
+import { useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 let ItemScreen = () => {
   return (
