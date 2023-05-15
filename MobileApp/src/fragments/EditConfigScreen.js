@@ -5,6 +5,7 @@ import SecondaryButton from "../elements/buttons/SecondaryButton";
 import MainButton from "../elements/buttons/MainButton";
 import SelectButton from "../elements/buttons/SelectButton";
 import { useNavigation } from "@react-navigation/native";
+import TwoValuesSelect from "../elements/TwoValuesSelect";
 
 let EditConfigScreen = () => {
   const navigation = useNavigation();
@@ -19,17 +20,17 @@ let EditConfigScreen = () => {
         flex: 4,
       }}>
         <Text style={{ fontSize: 16 }}>
-          Email
+          Product Name
         </Text>
         <InputText />
         <Text style={{ fontSize: 16 }}>
-          Password
+          Category
         </Text>
         <SelectButton />
         <Text style={{ fontSize: 16 }}>
           Price
         </Text>
-        <SelectButton />
+        <TwoValuesSelect />
       </View>
 
       <View style={{

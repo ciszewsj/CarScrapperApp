@@ -1,11 +1,11 @@
 import { Background } from "../elements/Background";
 import { ScrollView } from "react-native";
 import ItemLabel from "../elements/ItemLabel";
-import { useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
 import BoardView from "../elements/BoardView";
+import { useState } from "react";
 
 let ItemScreen = () => {
+  const [visible, setVisible] = useState(true);
   return (
     <Background>
       <ScrollView style={{ flex: 1, width: "100%" }}>
@@ -21,8 +21,7 @@ let ItemScreen = () => {
         <ItemLabel />
         <ItemLabel />
       </ScrollView>
-      <BoardView />
-
+      {visible && <BoardView onPress={setVisible} />}
     </Background>
   );
 };
