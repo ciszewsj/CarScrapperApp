@@ -4,12 +4,11 @@ import EditConfigScreen from "../fragments/EditConfigScreen";
 import SettingsScreen from "../fragments/SettingsScreen";
 
 let SettingsNavigator = () => {
-
   const Stack = createStackNavigator();
-
   return (
     <Stack.Navigator>
-      <Stack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="SettingsScreen" component={SettingsScreen}
+                    options={{ headerShown: false }} />
       <Stack.Screen name="Edit" component={EditConfigScreen} options={{
         headerShown: false,
         headerLeft: null,

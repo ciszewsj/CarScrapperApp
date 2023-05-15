@@ -2,12 +2,15 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import ItemScreen from "../fragments/ItemScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LinearGradient from "react-native-linear-gradient";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import SettingsNavigator from "./SettingsNavigator";
 import AccountScreen from "../fragments/AccountScreen";
+import { useNavigation } from "@react-navigation/native";
 
 let MainNavigator = () => {
   const Tab = createBottomTabNavigator();
+  const navigation = useNavigation();
+
 
   let ColorStyle = () => {
     return (
@@ -20,7 +23,6 @@ let MainNavigator = () => {
       />
     );
   };
-
   return (
     <Tab.Navigator
       initialRouteName="Scrapped Items"
@@ -28,6 +30,7 @@ let MainNavigator = () => {
         tabBarActiveTintColor: "#000000",
       }}
     >
+
       <Tab.Screen
         name="Settings"
         component={SettingsNavigator}
@@ -40,9 +43,12 @@ let MainNavigator = () => {
           tabBarBackground: () => <ColorStyle />,
           tabBarStyle: { borderTopWidth: 0 },
 
-          headerRight: () => <TouchableOpacity onPress={() => console.log("Dodaj")}>
-            <Text style={{ marginRight: 10 }}>Dodaj</Text>
-          </TouchableOpacity>,
+          headerRight: () =>
+            <TouchableOpacity style={{ marginRight: 10 }} onPress={() => {
+              navigation.navigate("SettingsScreen", { param1: "wartość parametru" });
+            }}>
+              <Ionicons name="menu-outline" size={30} />
+            </TouchableOpacity>,
         }}
 
       />
@@ -57,6 +63,14 @@ let MainNavigator = () => {
           headerBackground: () => <ColorStyle />,
           tabBarBackground: () => <ColorStyle />,
           tabBarStyle: { borderTopWidth: 0 },
+
+          headerRight: () =>
+            <TouchableOpacity style={{ marginRight: 10 }} onPress={() => {
+              navigation.navigate("Scrapped Items", { param1: "wartość parametru" });
+            }}>
+              <Ionicons name="menu-outline" size={30} />
+            </TouchableOpacity>,
+
         }}
       />
       <Tab.Screen
