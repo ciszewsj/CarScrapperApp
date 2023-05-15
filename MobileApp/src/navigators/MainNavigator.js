@@ -38,6 +38,7 @@ let MainNavigator = () => {
           ),
           headerBackground: () => <ColorStyle />,
           tabBarBackground: () => <ColorStyle />,
+          tabBarStyle: { borderTopWidth: 0 },
 
           headerRight: () => <TouchableOpacity onPress={() => console.log("Dodaj")}>
             <Text style={{ marginRight: 10 }}>Dodaj</Text>
@@ -55,6 +56,7 @@ let MainNavigator = () => {
           ),
           headerBackground: () => <ColorStyle />,
           tabBarBackground: () => <ColorStyle />,
+          tabBarStyle: { borderTopWidth: 0 },
         }}
       />
       <Tab.Screen
@@ -67,6 +69,8 @@ let MainNavigator = () => {
           ),
           headerBackground: () => <ColorStyle />,
           tabBarBackground: () => <ColorStyle />,
+          tabBarStyle: { borderTopWidth: 0 },
+
         }}
       />
     </Tab.Navigator>

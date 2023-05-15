@@ -3,6 +3,7 @@ import { ScrollView } from "react-native";
 import ItemLabel from "../elements/ItemLabel";
 import { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import BoardView from "../elements/BoardView";
 
 let ItemScreen = () => {
   return (
@@ -20,6 +21,8 @@ let ItemScreen = () => {
         <ItemLabel />
         <ItemLabel />
       </ScrollView>
+      <BoardView />
+
     </Background>
   );
 };
