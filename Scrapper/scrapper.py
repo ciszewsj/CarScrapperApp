@@ -41,13 +41,13 @@ class Scrapper:
                 "category": "CATEGORY2",
                 "price": 1200,
                 "image": "https://www.volkswagen.pl/idhub/content/dam/onehub_master/pc/models/cutouts-mofa-1-5/up_R-Line_34FrontPC.png",
-                "url": "https://www.olx.pl/"
+                "url": "https://stackoverflow.com/questions/54285086/cannot-construct-instance-of-com-test-filtermodel-no-string-argument-construc"
             },
             {
                 "name": "Volkswagen",
                 "category": "CATEGORY3",
                 "price": 1200,
                 "image": "https://www.volkswagen.pl/idhub/content/dam/onehub_master/pc/models/cutouts-mofa-1-5/up_R-Line_34FrontPC.png",
-                "url": "https://www.olx.pl/"
+                "url": "https://www.google.com/search?q=java.lang.IllegalArgumentException%3A+Cannot+construct+instance+of&oq=java.lang.IllegalArgumentException%3A+Cannot+construct+instance+of&aqs=chrome..69i57j69i59.680j0j9&sourceid=chrome&ie=UTF-8"
             },
         ]

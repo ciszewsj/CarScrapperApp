@@ -1,8 +1,6 @@
 package ee.ciszewsj.backend.database;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,17 +11,18 @@ import java.util.Date;
 @Setter
 public class Product {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String userId;
+	private String name;
 	private String imageUrl;
 	private String url;
 
 	@ManyToOne
 	private Category category;
 
-	private Date addedDate;
-	private Date lastSeen;
+	private Date addedDate = new Date();
+	private Date lastSeen = new Date();
 
 	private Long price;
 }

@@ -9,6 +9,7 @@ import lombok.Data;
 public class EventRequest {
 	private Type type;
 	private String user_id;
+	private EventConfigRequest body;
 
 	public enum Type {
 		GET_CATEGORY,
