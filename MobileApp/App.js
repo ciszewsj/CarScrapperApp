@@ -8,6 +8,7 @@ import { RegisterScreen } from "./src/fragments/RegisterScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import MainNavigator from "./src/navigators/MainNavigator";
+import firebase from "firebase/compat";
 
 export default function App() {
   let [globalContext, setGlobalContext] = useState(globalUsersSettings);
@@ -21,8 +22,15 @@ export default function App() {
     console.log(message);
     setA(message);
   });
+
   console.log(a);
 
+  useEffect(() => {
+    firebase.initializeApp({
+      apiKey: "AIzaSyCtMbrjgfueCGf5UTeLGcUXOhg4CDJ1Wk0",
+      appId: "1:86231730698:android:2b2ed375e8006821722df3",
+    });
+  }, []);
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {

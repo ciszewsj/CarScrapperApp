@@ -3,10 +3,13 @@ import { Text, View } from "react-native";
 import SecondaryButton from "../elements/buttons/SecondaryButton";
 import MainButton from "../elements/buttons/MainButton";
 import { useNavigation } from "@react-navigation/native";
+import "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import firebase from "firebase/compat";
 
 let AccountScreen = () => {
   const navigation = useNavigation();
-
 
   return (
     <Background>
@@ -25,7 +28,11 @@ let AccountScreen = () => {
         paddingHorizontal: 10,
       }}>
 
-        <MainButton isWidth={true}>
+        <MainButton isWidth={true} onPress={() => {
+          console.log(123);
+          firebase.auth().sendPasswordResetEmail("jakubpiotrciszewski@gmail.com").then(r => console.log(r));
+
+        }}>
           Change password
         </MainButton>
         <SecondaryButton isWidth={true} onPress={() => navigation.reset({
