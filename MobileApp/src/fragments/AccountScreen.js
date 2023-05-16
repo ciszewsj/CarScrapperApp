@@ -5,42 +5,46 @@ import MainButton from "../elements/buttons/MainButton";
 import { useNavigation } from "@react-navigation/native";
 import "firebase/auth";
 import firebase from "firebase/compat";
+import ProtectedView from "../elements/ProtectedView";
+import { useContext } from "react";
+import { GlobalUserContext } from "../context/GlobalUserContext";
 
 let AccountScreen = () => {
   const navigation = useNavigation();
+  const [auth, setAuth] = useContext(GlobalUserContext);
 
   return (
-    <Background>
-      <View style={{ flex: 2, justifyContent: "center", alignContent: "center" }}>
-        <Text style={{ fontSize: 50 }}>
-          ScrapItem
-        </Text>
-      </View>
-      <View style={{ flex: 1 }} />
+    <ProtectedView logged={true}>
+      <Background>
+        <View style={{ flex: 2, justifyContent: "center", alignContent: "center" }}>
+          <Text style={{ fontSize: 50 }}>
+            ScrapItem
+          </Text>
+        </View>
+        <View style={{ flex: 1 }} />
 
-      <View style={{
-        flex: 1,
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingVertical: 20,
-        paddingHorizontal: 10,
-      }}>
-
-        <MainButton isWidth={true} onPress={() => {
-          firebase.auth().sendPasswordResetEmail("jakubpiotrciszewski@gmail.com").then(r => console.log(r));
+        <View style={{
+          flex: 1,
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingVertical: 20,
+          paddingHorizontal: 10,
         }}>
-          Change password
-        </MainButton>
-        <SecondaryButton isWidth={true} onPress={() => navigation.reset({
-          index: 0,
-          routes: [{ name: "Login" }],
-        })}>
-          Logout
-        </SecondaryButton>
 
-      </View>
-      <View style={{ flex: 2 }} />
-    </Background>
-  );
+          <MainButton isWidth={true} onPress={() => {
+            firebase.auth().sendPasswordResetEmail("jakubpiotrciszewski@gmail.com").then(r => console.log(r));
+          }}>
+            Change password
+          </MainButton>
+          <SecondaryButton isWidth={true} onPress={() => setAuth({})}>
+            Logout
+          </SecondaryButton>
+
+        </View>
+        <View style={{ flex: 2 }} />
+      </Background>
+    </ProtectedView>
+  )
+    ;
 };
 export default AccountScreen;
