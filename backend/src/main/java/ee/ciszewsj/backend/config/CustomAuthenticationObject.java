@@ -16,9 +16,16 @@ public class CustomAuthenticationObject extends Jwt implements Principal {
 
 	private String id;
 	private String name;
+	private String email;
 
 	public CustomAuthenticationObject(String tokenValue, Instant issuedAt, Instant expiresAt, Map<String, Object> headers, Map<String, Object> claims) {
 		super(tokenValue, issuedAt, expiresAt, headers, claims);
+
+
+
+		this.email = claims.get("email").toString();
+		this.id = claims.get("user_id").toString();
+		this.name = claims.get("name").toString();
 	}
 
 	@Override

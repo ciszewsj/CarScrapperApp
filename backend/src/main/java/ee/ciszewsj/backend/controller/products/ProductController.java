@@ -2,7 +2,7 @@ package ee.ciszewsj.backend.controller.products;
 
 import ee.ciszewsj.backend.config.CustomAuthenticationObject;
 import ee.ciszewsj.backend.database.Product;
-import ee.ciszewsj.backend.database.User;
+import ee.ciszewsj.backend.database.AppUser;
 import ee.ciszewsj.backend.database.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Objects;
 
+import static ee.ciszewsj.backend.database.AppUser.createNewAppUser;
+
 @Slf4j
 @RestController
 @RequestMapping("/product")
@@ -24,14 +26,14 @@ public class ProductController {
 
 	@GetMapping
 	public List<Product> getProducts(@AuthenticationPrincipal CustomAuthenticationObject object) {
-		User user = repository.findById(object.getId()).orElseGet(() -> repository.save(new User(object.getId())));
+		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
 		return user.getProductList();
 	}
 
 	@GetMapping("/{id}")
 	public Product getProduct(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                          @PathVariable("id") Long id) {
-		User user = repository.findById(object.getId()).orElseGet(() -> repository.save(new User(object.getId())));
+		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
 		return user.getProductList().stream().filter(product -> Objects.equals(product.getId(), id)).findFirst().orElseThrow();
 	}
 }

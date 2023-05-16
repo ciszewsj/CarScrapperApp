@@ -4,8 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +14,21 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-public class User {
-	public User(String id) {
-		this.id = id;
-	}
-
+public class AppUser {
 	@Id
 	private String id;
 
 	@OneToMany
+	@Cascade(CascadeType.ALL)
 	private List<Product> productList = new ArrayList<>();
 
 	@OneToMany
+	@Cascade(CascadeType.ALL)
 	private List<ProductConfig> productConfigList = new ArrayList<>();
+
+	public static AppUser createNewAppUser(String id) {
+		AppUser appUser = new AppUser();
+		appUser.setId(id);
+		return appUser;
+	}
 }

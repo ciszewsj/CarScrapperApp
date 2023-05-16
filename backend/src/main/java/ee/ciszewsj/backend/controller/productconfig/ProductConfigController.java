@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 
+import static ee.ciszewsj.backend.database.AppUser.createNewAppUser;
+
 @Slf4j
 @RestController
 @RequestMapping("/config")
@@ -22,14 +24,14 @@ public class ProductConfigController {
 
 	@GetMapping
 	public List<ProductConfig> productConfigList(@AuthenticationPrincipal CustomAuthenticationObject object) {
-		User user = repository.findById(object.getId()).orElseGet(() -> repository.save(new User(object.getId())));
+		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
 		return user.getProductConfigList();
 	}
 
 	@GetMapping("/{id}")
 	public ProductConfig getConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                               @PathVariable("id") Long id) {
-		User user = repository.findById(object.getId()).orElseGet(() -> repository.save(new User(object.getId())));
+		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
 		return user.getProductConfigList().stream().filter(product -> Objects.equals(product.getId(), id)).findFirst().orElseThrow();
 	}
 
@@ -37,7 +39,7 @@ public class ProductConfigController {
 	public ProductConfig createProductConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                                         @RequestBody ProductConfigRequest request) {
 		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();
-		User user = repository.findById(object.getId()).orElseThrow();
+		AppUser user = repository.findById(object.getId()).orElseThrow();
 
 		ProductConfig config = new ProductConfig();
 		return updateProductConfig(request, user, category, config);
@@ -47,7 +49,7 @@ public class ProductConfigController {
 	public ProductConfig updateProductConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                                         @RequestBody ProductConfigRequest request,
 	                                         @PathVariable("id") Long id) {
-		User user = repository.findById(object.getId()).orElseThrow();
+		AppUser user = repository.findById(object.getId()).orElseThrow();
 		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();
 		ProductConfig config = user.getProductConfigList().stream().filter(productConfig -> Objects.equals(productConfig.getId(), id)).findFirst().orElseThrow();
 
@@ -57,13 +59,13 @@ public class ProductConfigController {
 	@DeleteMapping("/{id}")
 	public void deleteProductConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                                @PathVariable("id") Long id) {
-		User user = repository.findById(object.getId()).orElseThrow();
+		AppUser user = repository.findById(object.getId()).orElseThrow();
 		ProductConfig config = user.getProductConfigList().stream().filter(productConfig -> Objects.equals(productConfig.getId(), id)).findFirst().orElseThrow();
 		user.getProductConfigList().remove(config);
 		repository.save(user);
 	}
 
-	private ProductConfig updateProductConfig(@RequestBody ProductConfigRequest request, User user, Category category, ProductConfig config) {
+	private ProductConfig updateProductConfig(@RequestBody ProductConfigRequest request, AppUser user, Category category, ProductConfig config) {
 		config.setName(request.getName());
 		config.setCategory(category);
 		config.setPriceFrom(request.getPriceFrom());
