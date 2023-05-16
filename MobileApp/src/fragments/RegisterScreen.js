@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import InputText from "../elements/InputText";
+import InputText from "../elements/buttons/InputText";
 import SecondaryButton from "../elements/buttons/SecondaryButton";
 import { Background } from "../elements/Background";
 import { useNavigation } from "@react-navigation/native";

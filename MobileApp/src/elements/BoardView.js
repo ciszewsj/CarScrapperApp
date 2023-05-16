@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import InputText from "./InputText";
+import InputText from "./buttons/InputText";
 import MainButton from "./buttons/MainButton";
 import TwoValuesSelect from "./TwoValuesSelect";
 import SecondaryButton from "./buttons/SecondaryButton";

@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import InputText from "./InputText";
+import InputText from "./buttons/InputText";
 
 let TwoValuesSelect = () => {
   return (

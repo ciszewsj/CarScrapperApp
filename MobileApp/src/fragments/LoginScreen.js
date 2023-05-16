@@ -1,7 +1,7 @@
 import { Text, ToastAndroid, View } from "react-native";
 import MainButton from "../elements/buttons/MainButton";
 import SecondaryButton from "../elements/buttons/SecondaryButton";
-import InputText from "../elements/InputText";
+import InputText from "../elements/buttons/InputText";
 import { Background } from "../elements/Background";
 import { useNavigation } from "@react-navigation/native";
 import "firebase/auth";

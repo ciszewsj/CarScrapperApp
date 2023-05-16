@@ -30,21 +30,24 @@ class Scrapper:
         driver = self.driver
         return [
             {
-                "Name": "Volkswagen",
-                "Category": "CATEGORY1",
-                "Price": 1200,
-                "Image": "https://www.volkswagen.pl/idhub/content/dam/onehub_master/pc/models/cutouts-mofa-1-5/up_R-Line_34FrontPC.png"
+                "name": "Volkswagen",
+                "category": "CATEGORY1",
+                "price": 1200,
+                "image": "https://www.volkswagen.pl/idhub/content/dam/onehub_master/pc/models/cutouts-mofa-1-5/up_R-Line_34FrontPC.png",
+                "url": "https://www.olx.pl/"
             },
             {
-                "Name": "Volkswagen",
-                "Category": "CATEGORY2",
-                "Price": 1200,
-                "Image": "https://www.volkswagen.pl/idhub/content/dam/onehub_master/pc/models/cutouts-mofa-1-5/up_R-Line_34FrontPC.png"
+                "name": "Volkswagen",
+                "category": "CATEGORY2",
+                "price": 1200,
+                "image": "https://www.volkswagen.pl/idhub/content/dam/onehub_master/pc/models/cutouts-mofa-1-5/up_R-Line_34FrontPC.png",
+                "url": "https://www.olx.pl/"
             },
             {
-                "Name": "Volkswagen",
-                "Category": "CATEGORY3",
-                "Price": 1200,
-                "Image": "https://www.volkswagen.pl/idhub/content/dam/onehub_master/pc/models/cutouts-mofa-1-5/up_R-Line_34FrontPC.png"
+                "name": "Volkswagen",
+                "category": "CATEGORY3",
+                "price": 1200,
+                "image": "https://www.volkswagen.pl/idhub/content/dam/onehub_master/pc/models/cutouts-mofa-1-5/up_R-Line_34FrontPC.png",
+                "url": "https://www.olx.pl/"
             },
         ]

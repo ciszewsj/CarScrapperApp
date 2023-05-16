@@ -22,11 +22,12 @@ def send_to_queue(message, queue: str = RESPONSE_QUEUE):
 def callback(ch, method, properties, body):
     try:
         message = json.loads(body)
+        print("RECEIVED: ", message)
         if message["type"] == GET_CATEGORY:
             send_to_queue(response_body(message["type"], scrapper.get_categories()))
             return
         elif message["type"] == GET_CARS_FOR_USER:
-            send_to_queue(response_body(message["type"], scrapper.get_categories(), message["user_id"]))
+            send_to_queue(response_body(message["type"], scrapper.get_products(), message["user_id"]))
             return
         else:
             print("UNEXPECTED EVENT\n" + body)
@@ -37,6 +38,7 @@ def callback(ch, method, properties, body):
 scrapper = None
 channel = None
 if __name__ == "__main__":
+    print("SERVER INITED")
     try:
         scrapper = Scrapper()
         credentials = pika.PlainCredentials('guest', 'guest')
@@ -44,14 +46,11 @@ if __name__ == "__main__":
         connection = pika.BlockingConnection(parameters)
         channel = connection.channel()
 
-        print(send_to_queue(json.dumps({"type": "GET_CATEGORY", "body": None}), queue=REQUEST_QUEUE))
-        print(send_to_queue(json.dumps({"type": "GET_CARS_FOR_USER", "user_id": "user_id", "body": None}),
-                            queue=REQUEST_QUEUE))
-
         channel.queue_declare(queue=REQUEST_QUEUE)
         channel.basic_consume(queue=REQUEST_QUEUE, on_message_callback=callback, auto_ack=True)
-        channel.start_consuming()
 
+        print("SERVER STARTED")
+        channel.start_consuming()
         connection.close()
     except Exception as e:
         print(e)

@@ -17,6 +17,7 @@ public class Product {
 
 	private String userId;
 	private String imageUrl;
+	private String url;
 
 	@ManyToOne
 	private Category category;

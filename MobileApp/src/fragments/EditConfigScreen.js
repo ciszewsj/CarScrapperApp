@@ -1,15 +1,19 @@
 import { Background } from "../elements/Background";
 import { Text, View } from "react-native";
-import InputText from "../elements/InputText";
+import InputText from "../elements/buttons/InputText";
 import SecondaryButton from "../elements/buttons/SecondaryButton";
 import MainButton from "../elements/buttons/MainButton";
 import SelectButton from "../elements/buttons/SelectButton";
 import { useNavigation } from "@react-navigation/native";
 import TwoValuesSelect from "../elements/TwoValuesSelect";
 import ProtectedView from "../elements/ProtectedView";
+import { createConfig } from "../client/Client";
+import { useContext } from "react";
+import { GlobalUserContext } from "../context/GlobalUserContext";
 
 let EditConfigScreen = () => {
   const navigation = useNavigation();
+  const [auth, setAuth] = useContext(GlobalUserContext);
 
   return (
     <ProtectedView logged={true}>
@@ -45,7 +49,9 @@ let EditConfigScreen = () => {
           <SecondaryButton onPress={() => navigation.navigate("SettingsScreen")}>
             Remove
           </SecondaryButton>
-          <MainButton onPress={() => navigation.navigate("SettingsScreen")}>
+          <MainButton onPress={() =>
+            createConfig(auth.token, {})
+          }>
             Save
           </MainButton>
         </View>
