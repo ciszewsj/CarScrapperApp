@@ -4,3 +4,9 @@ export class ResponseObject {
     this.body = body;
   }
 }
+
+export const Statuses = {
+  SUCCESS: "Success",
+  FAILURE: "Failure",
+  VALIDATION_ERROR: "Validation Error",
+};

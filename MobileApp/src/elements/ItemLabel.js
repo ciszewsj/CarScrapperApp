@@ -11,11 +11,14 @@ let ItemLabel = () => {
         console.log("FAILURE");
       }
     });
-  }
+  };
   return (
     <Label url={url} onPress={press}>
       <Image resizeMethod={"scale"} style={{ height: 130, width: 130, borderRadius: 10 }}
-             source={require("./car-test.jpg")} blurRadius={1} />
+             // source={{ uri: "https://www.searchenginejournal.com/wp-content/uploads/2022/06/image-search-1600-x-840-px-62c6dc4ff1eee-sej.png")}}
+             source={{ uri: "https://www.searchenginejournal.com/wp-content/uploads/2022/06/image-search-1600-x-840-px-62c6dc4ff1eee-sej.png" }}
+
+             blurRadius={1} />
       <View style={{ marginLeft: 10, flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text numberOfLines={1} style={{ fontSize: 24 }}>Mazda MX5</Text>
         <Text numberOfLines={1} style={{ fontSize: 16 }}>1200PLN</Text>

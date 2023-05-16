@@ -1,9 +1,7 @@
 package ee.ciszewsj.backend.controller.products;
 
 import ee.ciszewsj.backend.config.CustomAuthenticationObject;
-import ee.ciszewsj.backend.database.Product;
-import ee.ciszewsj.backend.database.AppUser;
-import ee.ciszewsj.backend.database.UserRepository;
+import ee.ciszewsj.backend.database.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +21,7 @@ import static ee.ciszewsj.backend.database.AppUser.createNewAppUser;
 @RequiredArgsConstructor
 public class ProductController {
 	private final UserRepository repository;
+	private final CategoryRepository categoryRepository;
 
 	@GetMapping
 	public List<Product> getProducts(@AuthenticationPrincipal CustomAuthenticationObject object) {
@@ -35,5 +34,10 @@ public class ProductController {
 	                          @PathVariable("id") Long id) {
 		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
 		return user.getProductList().stream().filter(product -> Objects.equals(product.getId(), id)).findFirst().orElseThrow();
+	}
+
+	@GetMapping("/categories")
+	public List<Category> getCategories() {
+		return categoryRepository.findAll();
 	}
 }

@@ -18,7 +18,7 @@ public class Product {
 	private String imageUrl;
 	private String url;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Category category;
 
 	private Date addedDate = new Date();

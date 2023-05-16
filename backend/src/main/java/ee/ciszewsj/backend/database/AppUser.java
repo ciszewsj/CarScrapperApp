@@ -1,6 +1,7 @@
 package ee.ciszewsj.backend.database;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -18,11 +19,11 @@ public class AppUser {
 	@Id
 	private String id;
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
 	private List<Product> productList = new ArrayList<>();
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
 	private List<ProductConfig> productConfigList = new ArrayList<>();
 

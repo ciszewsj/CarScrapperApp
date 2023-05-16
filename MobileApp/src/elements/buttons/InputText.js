@@ -1,7 +1,7 @@
 import React from "react";
 import { TextInput, StyleSheet } from "react-native";
 
-const InputText = ({ variant, value, onChange, isSecure }) => {
+const InputText = ({ variant, value, onChange, isSecure, keyboard }) => {
 
   return (
     <TextInput
@@ -9,6 +9,7 @@ const InputText = ({ variant, value, onChange, isSecure }) => {
       onChangeText={onChange}
       value={value}
       secureTextEntry={isSecure}
+      keyboardType={keyboard}
     />
   );
 };

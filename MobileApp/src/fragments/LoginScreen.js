@@ -11,17 +11,14 @@ import LoadingRoll from "../elements/LoadingRoll";
 import { GlobalUserContext, globalUsersSettings } from "../context/GlobalUserContext";
 import ProtectedView from "../elements/ProtectedView";
 import Toast from "react-native-toast-message";
-// import Toast from "react-native-toast-message";
 
 let LoginScreen = () => {
 
   const [auth, setAuth] = useContext(GlobalUserContext);
-
   const navigation = useNavigation();
-
   const [loading, setLoading] = useState(false);
-
   const [form, setForm] = useState({});
+
 
   return (
     <ProtectedView logged={false}>
@@ -82,12 +79,13 @@ let LoginScreen = () => {
                 },
               ).catch(e => {
               console.log("Bład");
-              Toast.show({
-                type: "success",
-                text1: "Hello",
-                text2: "This is some something 👋",
-              });
-              setLoading(false);
+              ToastAndroid.show("Wrong data !", ToastAndroid.SHORT);
+              // Toast.show({
+              //   type: "success",
+              //   text1: "Hello",
+              //   text2: "This is some something 👋",
+              // });
+              // setLoading(false);
             });
           }}>
             Login

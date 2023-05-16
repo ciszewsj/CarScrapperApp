@@ -13,7 +13,7 @@ public class ProductConfig {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER)
 	private Category category;
 	private Long priceFrom;
 	private Long priceTo;

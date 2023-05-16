@@ -44,9 +44,11 @@ public class RabbitMqReceiver {
 						.distinct()
 						.filter(category -> !existedCategory.contains(category))
 						.forEach(category -> {
+							log.info(category);
 							Category newCategory = new Category();
 							newCategory.setName(category);
-							categoryRepository.save(newCategory);
+							newCategory = categoryRepository.save(newCategory);
+							log.info("{} - {}", newCategory.getName(), newCategory.getId());
 						});
 
 			} else if (response.getType().equals(EventResponse.Type.GET_CARS_FOR_USER)) {
