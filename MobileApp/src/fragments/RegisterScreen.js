@@ -1,33 +1,16 @@
-import { BackHandler, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import InputText from "../elements/InputText";
 import SecondaryButton from "../elements/buttons/SecondaryButton";
 import { Background } from "../elements/Background";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
 import ProtectedView from "../elements/ProtectedView";
 
 export let RegisterScreen = () => {
   const navigation = useNavigation();
-  useEffect(() => {
-
-    const backAction = () => {
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction,
-    );
-
-    return () => backHandler.remove();
-  }, []);
-
 
   return (
     <ProtectedView logged={false}>
-
       <Background>
-
         <View style={{ flex: 2, justifyContent: "center", alignContent: "center" }}>
           <Text style={{ fontSize: 50 }}>
             ScrapItem

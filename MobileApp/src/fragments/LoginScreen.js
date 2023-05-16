@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, ToastAndroid, View } from "react-native";
 import MainButton from "../elements/buttons/MainButton";
 import SecondaryButton from "../elements/buttons/SecondaryButton";
 import InputText from "../elements/InputText";
@@ -10,6 +10,8 @@ import { useContext, useState } from "react";
 import LoadingRoll from "../elements/LoadingRoll";
 import { GlobalUserContext, globalUsersSettings } from "../context/GlobalUserContext";
 import ProtectedView from "../elements/ProtectedView";
+import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 
 let LoginScreen = () => {
 
@@ -69,18 +71,24 @@ let LoginScreen = () => {
                     },
                   ).catch(e => {
                       console.log("Bład");
+                      Toast.show({
+                        type: "success",
+                        text1: "Hello",
+                        text2: "This is some something 👋",
+                      });
                       setLoading(false);
                     },
                   );
                 },
               ).catch(e => {
               console.log("Bład");
+              Toast.show({
+                type: "success",
+                text1: "Hello",
+                text2: "This is some something 👋",
+              });
               setLoading(false);
             });
-            // navigation.reset({
-            //   index: 0,
-            //   routes: [{ name: "Main" }],
-            // });
           }}>
             Login
           </MainButton>

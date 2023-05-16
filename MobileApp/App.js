@@ -9,6 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import MainNavigator from "./src/navigators/MainNavigator";
 import firebase from "firebase/compat";
+import Toast from "react-native-toast-message";
 
 export default function App() {
   let [globalContext, setGlobalContext] = useState(globalUsersSettings);
@@ -45,6 +46,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
+
       <StatusBar translucent={true} hidden={true} />
       <GlobalUserContext.Provider value={[globalContext, setGlobalContext]}>
         <Stack.Navigator>
@@ -59,6 +61,8 @@ export default function App() {
           }} />
         </Stack.Navigator>
       </GlobalUserContext.Provider>
+      <Toast />
+
     </NavigationContainer>
   );
 }

@@ -2,7 +2,6 @@ import { Background } from "../elements/Background";
 import { Text, View } from "react-native";
 import SecondaryButton from "../elements/buttons/SecondaryButton";
 import MainButton from "../elements/buttons/MainButton";
-import { useNavigation } from "@react-navigation/native";
 import "firebase/auth";
 import firebase from "firebase/compat";
 import ProtectedView from "../elements/ProtectedView";
@@ -10,7 +9,6 @@ import { useContext } from "react";
 import { GlobalUserContext } from "../context/GlobalUserContext";
 
 let AccountScreen = () => {
-  const navigation = useNavigation();
   const [auth, setAuth] = useContext(GlobalUserContext);
 
   return (
