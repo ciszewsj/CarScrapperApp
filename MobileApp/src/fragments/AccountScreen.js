@@ -4,8 +4,6 @@ import SecondaryButton from "../elements/buttons/SecondaryButton";
 import MainButton from "../elements/buttons/MainButton";
 import { useNavigation } from "@react-navigation/native";
 import "firebase/auth";
-import { initializeApp } from "firebase/app";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import firebase from "firebase/compat";
 
 let AccountScreen = () => {
@@ -29,9 +27,7 @@ let AccountScreen = () => {
       }}>
 
         <MainButton isWidth={true} onPress={() => {
-          console.log(123);
           firebase.auth().sendPasswordResetEmail("jakubpiotrciszewski@gmail.com").then(r => console.log(r));
-
         }}>
           Change password
         </MainButton>
@@ -44,7 +40,6 @@ let AccountScreen = () => {
 
       </View>
       <View style={{ flex: 2 }} />
-
     </Background>
   );
 };

@@ -4,13 +4,24 @@ import SecondaryButton from "../elements/buttons/SecondaryButton";
 import InputText from "../elements/InputText";
 import { Background } from "../elements/Background";
 import { useNavigation } from "@react-navigation/native";
+import "firebase/auth";
+import firebase from "firebase/compat";
+import { useContext, useState } from "react";
+import LoadingRoll from "../elements/LoadingRoll";
+import { GlobalUserContext, globalUsersSettings } from "../context/GlobalUserContext";
 
 let LoginScreen = () => {
+
+  const [auth, setAuth] = useContext(GlobalUserContext);
+
   const navigation = useNavigation();
+
+  const [loading, setLoading] = useState(false);
+
+  const [form, setForm] = useState({});
 
   return (
     <Background>
-
       <View style={{ flex: 2, justifyContent: "center", alignContent: "center" }}>
         <Text style={{ fontSize: 50 }}>
           ScrapItem
@@ -22,11 +33,17 @@ let LoginScreen = () => {
         <Text style={{ fontSize: 16 }}>
           Email
         </Text>
-        <InputText />
+        <InputText value={form.login} onChange={e => {
+          setForm({ ...form, "login": e });
+        }} />
         <Text style={{ fontSize: 16 }}>
           Password
         </Text>
-        <InputText />
+        <InputText value={form.password} onChange={e => {
+          setForm({ ...form, "password": e });
+        }} isSecure={true}
+
+        />
       </View>
 
       <View style={{
@@ -38,13 +55,37 @@ let LoginScreen = () => {
         <SecondaryButton onPress={() => navigation.navigate("Register")}>
           Register
         </SecondaryButton>
-        <MainButton onPress={() => navigation.reset({
-          index: 0,
-          routes: [{ name: "Main" }],
-        })}>
+        <MainButton onPress={() => {
+          setLoading(true);
+          firebase.auth().signInWithEmailAndPassword(form.login, form.password)
+            .then(info => {
+                info.user.getIdToken().then(
+                  token => {
+                    setLoading(false);
+                    setAuth(globalUsersSettings(token, info.user.email, info.user.displayName,
+                      info.user.tenantId));
+                  },
+                ).catch(e => {
+                    console.log("Bład");
+                    setLoading(false);
+                  },
+                );
+              },
+            ).catch(e => {
+            console.log("Bład");
+
+            setLoading(false);
+          });
+          // navigation.reset({
+          //   index: 0,
+          //   routes: [{ name: "Main" }],
+          // });
+        }}>
           Login
         </MainButton>
       </View>
+      {loading && <LoadingRoll />}
+
     </Background>
 
   );

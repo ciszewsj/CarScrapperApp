@@ -1,69 +1,35 @@
-import { StyleSheet, Text, View } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { Text, View } from "react-native";
 import InputText from "./InputText";
 import MainButton from "./buttons/MainButton";
 import TwoValuesSelect from "./TwoValuesSelect";
 import SecondaryButton from "./buttons/SecondaryButton";
+import ModalElement from "./Modal";
 
 let BoardView = ({ onPress }) => {
   return (
-    <LinearGradient
-      colors={["rgba(45, 109, 232, 0.5)", "rgba(10, 245, 245, 0.9)", "rgba(245, 31, 236, 0.6)", "rgba(245, 31, 236, 0.8)"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      locations={[0, 0.3333, 0.6667, 1]}
-      style={{ height: "100%", width: "100%", position: "absolute" }}
-    >
-      <View style={styles.modal}>
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-start", width: 340 }}>
-          <Text style={{ fontSize: 24 }}>Filter</Text>
-        </View>
-        <View style={{ flex: 2 }}>
-          <Text style={{ fontSize: 16 }}>Product name</Text>
-          <InputText />
-          <Text style={{ fontSize: 16 }}>Category</Text>
-          <InputText />
-          <Text>Price</Text>
-          <TwoValuesSelect />
-        </View>
-        <View style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          width: 300,
-        }}>
-          <SecondaryButton onPress={() => onPress(false)}>Save</SecondaryButton>
-          <MainButton onPress={() => onPress(false)}>Filter</MainButton>
-        </View>
+    <ModalElement>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-start", width: 340 }}>
+        <Text style={{ fontSize: 24 }}>Filter</Text>
       </View>
-    </LinearGradient>
+      <View style={{ flex: 2 }}>
+        <Text style={{ fontSize: 16 }}>Product name</Text>
+        <InputText />
+        <Text style={{ fontSize: 16 }}>Category</Text>
+        <InputText />
+        <Text>Price</Text>
+        <TwoValuesSelect />
+      </View>
+      <View style={{
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: 300,
+      }}>
+        <SecondaryButton onPress={() => onPress(false)}>Save</SecondaryButton>
+        <MainButton onPress={() => onPress(false)}>Filter</MainButton>
+      </View>
+    </ModalElement>
   );
 
 };
 export default BoardView;
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    fontSize: 20,
-  },
-  modal: {
-    backgroundColor: "rgba(0, 0, 0, 0)",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  closeButton: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#007AFF",
-  },
-});

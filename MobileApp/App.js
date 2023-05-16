@@ -12,6 +12,7 @@ import firebase from "firebase/compat";
 
 export default function App() {
   let [globalContext, setGlobalContext] = useState(globalUsersSettings);
+
   messaging().getToken().then(token =>
     console.log(token));
   let [a, setA] = useState({});

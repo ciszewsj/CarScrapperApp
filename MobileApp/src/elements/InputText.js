@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { TextInput, StyleSheet } from "react-native";
 
-const InputText = ({ variant }) => {
-  const [text, setText] = useState("");
+const InputText = ({ variant, value, onChange, isSecure }) => {
 
   return (
     <TextInput
       style={{ ...styles.input, ...(variant === "small" && styles.small) }}
-      onChangeText={setText}
-      value={text}
-      secureTextEntry={true}
+      onChangeText={onChange}
+      value={value}
+      secureTextEntry={isSecure}
     />
   );
 };
