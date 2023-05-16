@@ -5,6 +5,7 @@ import BoardView from "../elements/BoardView";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
+import ProtectedView from "../elements/ProtectedView";
 
 let ItemScreen = () => {
   const route = useRoute();
@@ -20,22 +21,24 @@ let ItemScreen = () => {
     }
   }, [route]);
   return (
-    <Background>
-      <ScrollView style={{ flex: 1, width: "100%" }}>
-        <ItemLabel />
-        <ItemLabel />
-        <ItemLabel />
-        <ItemLabel />
-        <ItemLabel />
-        <ItemLabel />
-        <ItemLabel />
-        <ItemLabel />
-        <ItemLabel />
-        <ItemLabel />
-        <ItemLabel />
-      </ScrollView>
-      {modal && <BoardView onPress={setModal} />}
-    </Background>
+    <ProtectedView logged={true}>
+      <Background>
+        <ScrollView style={{ flex: 1, width: "100%" }}>
+          <ItemLabel />
+          <ItemLabel />
+          <ItemLabel />
+          <ItemLabel />
+          <ItemLabel />
+          <ItemLabel />
+          <ItemLabel />
+          <ItemLabel />
+          <ItemLabel />
+          <ItemLabel />
+          <ItemLabel />
+        </ScrollView>
+        {modal && <BoardView onPress={setModal} />}
+      </Background>
+    </ProtectedView>
   );
 };
 export default ItemScreen;

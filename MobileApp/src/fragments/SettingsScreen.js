@@ -4,6 +4,7 @@ import ConfigLabel from "../elements/ConfigLabel";
 import BoardView from "../elements/BoardView";
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import ProtectedView from "../elements/ProtectedView";
 
 let SettingsScreen = () => {
   const route = useRoute();
@@ -19,23 +20,25 @@ let SettingsScreen = () => {
   }, [route]);
 
   return (
-    <Background>
-      <ScrollView style={{ flex: 1, width: "100%" }}>
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-        <ConfigLabel />
-      </ScrollView>
-      {modal && <BoardView onPress={setModal} />}
-    </Background>
+    <ProtectedView logged={true}>
+      <Background>
+        <ScrollView style={{ flex: 1, width: "100%" }}>
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+          <ConfigLabel />
+        </ScrollView>
+        {modal && <BoardView onPress={setModal} />}
+      </Background>
+    </ProtectedView>
   );
 };
 export default SettingsScreen;
