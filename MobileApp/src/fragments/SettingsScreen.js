@@ -18,7 +18,7 @@ let SettingsScreen = () => {
   const isFocused = useIsFocused();
 
   const [auth, setAuth] = useContext(GlobalUserContext);
-  const [modal, setModal] = useState();
+  const [modal, setModal] = useState(false);
   const [response, setResponse] = useState({});
   const [loadingGetCategories, setLoadingGetCategories] = useState(false);
 
@@ -32,14 +32,13 @@ let SettingsScreen = () => {
         setLoadingGetCategories(false);
         break;
       default:
-        setLoadingGetCategories(false);
     }
   }, [response]);
 
   useEffect(() => {
     if (isFocused) {
+      setModal(false);
       setLoadingGetCategories(true);
-      console.log("GETTING");
       getConfigList(auth.token, setResponse);
     }
   }, [isFocused]);

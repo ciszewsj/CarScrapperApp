@@ -1,8 +1,21 @@
 import { Image, Linking, Text, View } from "react-native";
 import Label from "./Label";
+import { useEffect, useState } from "react";
 
-let ItemLabel = () => {
-  let url = "https://www.otomoto.pl/oferta/toyota-yaris-toyota-yaris-gr-1-6-dynamic-ID6Fbf8O.html";
+let ItemLabel = ({ url, imageUrl, date, name, price, category }) => {
+
+  let [dateFormat, setDateFormat] = useState();
+
+  useEffect(() => {
+    let dateValue = new Date(date);
+    const year = dateValue.getFullYear();
+    const month = String(dateValue.getMonth() + 1).padStart(2, "0");
+    const day = String(dateValue.getDate()).padStart(2, "0");
+    const hours = String(dateValue.getHours()).padStart(2, "0");
+    const minutes = String(dateValue.getMinutes()).padStart(2, "0");
+    const seconds = String(dateValue.getSeconds()).padStart(2, "0");
+    setDateFormat(`${year}-${month}-${day} ${hours}:${minutes}:${seconds}`);
+  }, []);
   let press = () => {
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
@@ -15,15 +28,13 @@ let ItemLabel = () => {
   return (
     <Label url={url} onPress={press}>
       <Image resizeMethod={"scale"} style={{ height: 130, width: 130, borderRadius: 10 }}
-             // source={{ uri: "https://www.searchenginejournal.com/wp-content/uploads/2022/06/image-search-1600-x-840-px-62c6dc4ff1eee-sej.png")}}
-             source={{ uri: "https://www.searchenginejournal.com/wp-content/uploads/2022/06/image-search-1600-x-840-px-62c6dc4ff1eee-sej.png" }}
-
+             source={{ uri: imageUrl }}
              blurRadius={1} />
       <View style={{ marginLeft: 10, flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text numberOfLines={1} style={{ fontSize: 24 }}>Mazda MX5</Text>
-        <Text numberOfLines={1} style={{ fontSize: 16 }}>1200PLN</Text>
-        <Text numberOfLines={1} style={{ fontSize: 16 }}>2015</Text>
-        <Text numberOfLines={1} style={{ fontSize: 16 }}>09.02.2023r. 21:37</Text>
+        <Text numberOfLines={1} style={{ fontSize: 24 }}>{name}</Text>
+        <Text numberOfLines={1} style={{ fontSize: 16 }}>{category}</Text>
+        <Text numberOfLines={1} style={{ fontSize: 16 }}>{price} PLN</Text>
+        <Text numberOfLines={1} style={{ fontSize: 16 }}>{dateFormat}</Text>
       </View>
     </Label>
   );

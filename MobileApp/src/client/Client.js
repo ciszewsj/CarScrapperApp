@@ -172,3 +172,28 @@ export function updateConfig(id, token, form, setResponse) {
     setResponse(new ResponseObject(Statuses.FAILURE), null);
   });
 }
+
+export function getMyProductsList(token, setResponse) {
+  fetch(URL + "/product", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  })
+    .then((response) => {
+      if (response.status !== 200) {
+        setResponse(new ResponseObject(Statuses.FAILURE), null);
+      } else {
+        response.json().then((data) => {
+          setResponse(new ResponseObject(Statuses.SUCCESS, data));
+        }).catch((error) => {
+          setResponse(new ResponseObject(Statuses.FAILURE), null);
+        });
+      }
+    })
+    .catch((error) => {
+      setResponse(new ResponseObject(Statuses.FAILURE), null);
+    });
+}
