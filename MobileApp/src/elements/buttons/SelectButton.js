@@ -11,15 +11,19 @@ const SelectButton = ({ idSelected, onSelect, setLoadingCategories }) => {
 
   const [auth, setAuth] = useContext(GlobalUserContext);
   const [responseCategories, setResponseCategories] = useState({});
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState("");
   const [value, setValue] = useState([]);
 
-
   useEffect(() => {
-    if (value.length >= idSelected && idSelected > 0) {
-      setSelected(value[idSelected - 1]);
+    if (selected != null && selected.length > 0) {
+      let res;
+      let tmp = value && value.find(obj => {
+        return obj.value === selected;
+      });
+      res = tmp != null && tmp.key != null ? tmp.key : 0;
+      res && onSelect ? onSelect(res) : ToastAndroid.show("Could not set value!", ToastAndroid.SHORT);
     }
-  }, [value, idSelected]);
+  }, [selected]);
 
   useEffect(() => {
     if (responseCategories.code === Statuses.FAILURE) {
@@ -60,12 +64,12 @@ const SelectButton = ({ idSelected, onSelect, setLoadingCategories }) => {
           borderColor: "rgba(221, 38, 38, 0.21)",
           backgroundGradient: "linear-gradient(91.91deg, rgba(255, 255, 255, 0.7) 0%, rgba(166, 223, 255, 0.7) 28.42%, rgba(96, 255, 150, 0.7) 100%)",
         }}
+
         setSelected={(val) => {
           setSelected(val);
-          let tmp = value && value.find(obj => obj.value === val);
-          onSelect && onSelect(tmp && tmp.id);
         }}
-        defaultOption={selected}
+
+        defaultOption={value[idSelected - 1]}
         data={value}
         save="value"
       />

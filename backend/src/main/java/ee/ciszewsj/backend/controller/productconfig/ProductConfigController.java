@@ -46,7 +46,10 @@ public class ProductConfigController {
 		AppUser user = getUser(object.getId());
 
 		ProductConfig config = new ProductConfig();
-		return updateProductConfig(request, user, category, config);
+		config = updateProductConfig(request, category, config);
+		user.getProductConfigList().add(config);
+		config = configRepository.save(config);
+		return config;
 	}
 
 	@PutMapping("/{id}")
@@ -57,29 +60,35 @@ public class ProductConfigController {
 		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();
 		ProductConfig config = user.getProductConfigList().stream().filter(productConfig -> Objects.equals(productConfig.getId(), id)).findFirst().orElseThrow();
 
-		return updateProductConfig(request, user, category, config);
+		config = updateProductConfig(request, category, config);
+		repository.save(user);
+
+		return config;
 	}
 
 	@DeleteMapping("/{id}")
 	public void deleteProductConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                                @PathVariable("id") Long id) {
 		AppUser user = getUser(object.getId());
-		ProductConfig config = user.getProductConfigList().stream().filter(productConfig -> Objects.equals(productConfig.getId(), id)).findFirst().orElseThrow();
+		ProductConfig config = user.getProductConfigList()
+				.stream()
+				.filter(productConfig -> Objects.equals(productConfig.getId(), id))
+				.findFirst()
+				.orElseThrow();
+
 		user.getProductConfigList().remove(config);
 		repository.save(user);
+		log.info("deleted");
 	}
 
-	private ProductConfig updateProductConfig(@RequestBody ProductConfigRequest request, AppUser user, Category category, ProductConfig config) {
+	private ProductConfig updateProductConfig(ProductConfigRequest request, Category category, ProductConfig config) {
 		config.setName(request.getName());
 		config.setCategory(category);
 		config.setPriceFrom(request.getPriceFrom());
 		config.setPriceTo(request.getPriceTo());
 		config = configRepository.save(config);
-
-		user.getProductConfigList().add(config);
-		repository.save(user);
-
 		return config;
+
 	}
 
 }

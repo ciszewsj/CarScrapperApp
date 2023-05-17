@@ -71,6 +71,27 @@ export function getConfig(id, token, setResponse) {
     });
 }
 
+export function deleteConfig(id, token, setResponse) {
+  fetch(URL + "/config/" + id, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  })
+    .then((response) => {
+      if (response.status !== 200) {
+        setResponse(new ResponseObject(Statuses.FAILURE), null);
+      } else {
+        setResponse({ ...new ResponseObject(Statuses.SUCCESS, null) });
+      }
+    })
+    .catch((error) => {
+      setResponse(new ResponseObject(Statuses.FAILURE), null);
+    });
+}
+
 export function getConfigList(token, setResponse) {
   fetch(URL + "/config", {
     method: "GET",
@@ -106,10 +127,10 @@ export function createConfig(token, form, setResponse) {
     },
     "body": JSON.stringify(form),
   }).then(r => {
-    console.log("STATUS ??? ", r.status)
+    console.log("STATUS ??? ", r.status);
     if (r.status !== 200) {
       setResponse(new ResponseObject(Statuses.FAILURE), null);
-    }else {
+    } else {
       r.json().then(
         response => {
           setResponse(new ResponseObject(Statuses.SUCCESS, response));
@@ -133,12 +154,12 @@ export function updateConfig(id, token, form, setResponse) {
     },
     "body": JSON.stringify(form),
   }).then(r => {
-    console.log("STATUS ??? ", r.status)
+    console.log("STATUS ??? ", r.status);
 
     if (r.status !== 200) {
       setResponse(new ResponseObject(Statuses.FAILURE), null);
 
-    }else {
+    } else {
       r.json().then(
         response => {
           setResponse(new ResponseObject(Statuses.SUCCESS, response));

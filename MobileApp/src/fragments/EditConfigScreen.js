@@ -7,7 +7,7 @@ import SelectButton from "../elements/buttons/SelectButton";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import TwoValuesSelect from "../elements/TwoValuesSelect";
 import ProtectedView from "../elements/ProtectedView";
-import { createConfig, getConfig, getProductsCategories, updateConfig } from "../client/Client";
+import { createConfig, deleteConfig, getConfig, updateConfig } from "../client/Client";
 import { useContext, useEffect } from "react";
 import { GlobalUserContext } from "../context/GlobalUserContext";
 import { useState } from "react";
@@ -20,12 +20,31 @@ let EditConfigScreen = () => {
   const [auth, setAuth] = useContext(GlobalUserContext);
   const [form, setForm] = useState({});
   const [responseCreateConfig, setResponseCreateConfig] = useState({});
-  let [responseGetConfig, setResponseGetConfig] = useState({});
+  const [responseGetConfig, setResponseGetConfig] = useState({});
+  const [responseDeleteConfig, setResponseDeleteConfig] = useState({});
+
   const [loadingCreateConfig, setLoadingCreateConfig] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [loadingGetCategories, setLoadingGetCategories] = useState(false);
+
+  const [loadingDeleteCategories, setLoadingDeleteCategories] = useState(false);
+
   const [id, setId] = useState(null);
-  console.log(form);
+
+  useEffect(() => {
+    switch (responseDeleteConfig.code) {
+      case Statuses.SUCCESS:
+        setLoadingDeleteCategories(false);
+        navigation.navigate("SettingsScreen");
+        break;
+      case Statuses.FAILURE:
+        ToastAndroid.show("Could not delete config!", ToastAndroid.SHORT);
+        setLoadingDeleteCategories(false);
+        break;
+      default:
+    }
+  }, [responseDeleteConfig]);
+
   useEffect(() => {
     switch (responseCreateConfig.code) {
       case Statuses.SUCCESS:
@@ -112,7 +131,10 @@ let EditConfigScreen = () => {
           justifyContent: id == null ? "center" : "space-between",
           width: 300,
         }}>{id &&
-          <SecondaryButton onPress={() => navigation.navigate("SettingsScreen")}>
+          <SecondaryButton onPress={() => {
+            setLoadingDeleteCategories(true);
+            deleteConfig(id, auth.token, setResponseDeleteConfig);
+          }}>
             Remove
           </SecondaryButton>}
           <MainButton onPress={() => {
@@ -125,7 +147,8 @@ let EditConfigScreen = () => {
             Save
           </MainButton>
         </View>
-        {(loadingCreateConfig || loadingCategories || loadingGetCategories) && <LoadingRoll />}
+        {(loadingCreateConfig || loadingCategories || loadingGetCategories || loadingDeleteCategories) &&
+          <LoadingRoll />}
       </Background>
     </ProtectedView>
   );
