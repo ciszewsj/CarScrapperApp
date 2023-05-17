@@ -16,7 +16,7 @@ public class NotificationService {
 
 	private final FirebaseMessaging firebaseMessaging;
 
-	public void sendNotificationToUser(Product product) {
+	public void sendNotificationToUser(String userId, Product product) {
 		Notification notification = Notification.builder()
 				.setTitle(product.getName())
 				.setBody(product.getCategory().getName() + " - " + product.getPrice())
@@ -25,7 +25,8 @@ public class NotificationService {
 		log.info("{} - {}", product.getName(), product.getCategory().getName());
 		Message message = Message.builder()
 				.setNotification(notification)
-				.setToken("eoiZ2QDXSpKh0e03wj04Yh:APA91bEWJV3gVEvgUl-cbxQpqS5wDzybSiovjTo1mux5KscVUmkKjEUWs4ePZMpU7rcWY0md_TObbJnrTXHcNz4D314eIufnoE1q6UgaKISb9vsRUuDufpMqK0kGUmC0oOSxzbgb1dZw")
+				.setTopic(userId)
+//				.setToken("eoiZ2QDXSpKh0e03wj04Yh:APA91bEWJV3gVEvgUl-cbxQpqS5wDzybSiovjTo1mux5KscVUmkKjEUWs4ePZMpU7rcWY0md_TObbJnrTXHcNz4D314eIufnoE1q6UgaKISb9vsRUuDufpMqK0kGUmC0oOSxzbgb1dZw")
 				.build();
 		try {
 			firebaseMessaging.send(message);

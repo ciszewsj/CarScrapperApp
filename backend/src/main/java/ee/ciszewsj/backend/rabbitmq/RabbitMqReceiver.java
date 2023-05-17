@@ -73,7 +73,7 @@ public class RabbitMqReceiver {
 									product.setPrice(item.getPrice());
 									product.setImageUrl(item.getImage());
 									user.getProductList().add(product);
-									notificationService.sendNotificationToUser(product);
+									notificationService.sendNotificationToUser(user.getId(), product);
 								}
 							} catch (Exception e) {
 								log.error(e.toString());

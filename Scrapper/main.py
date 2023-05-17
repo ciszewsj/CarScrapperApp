@@ -24,7 +24,9 @@ def callback(ch, method, properties, body):
         message = json.loads(body)
         print("RECEIVED: ", message)
         if message["type"] == GET_CATEGORY:
-            send_to_queue(response_body(message["type"], scrapper.get_categories()))
+            categories = scrapper.get_categories()
+            if len(categories) > 0:
+                send_to_queue(response_body(message["type"], categories))
             return
         elif message["type"] == GET_CARS_FOR_USER:
             config = message["body"]
