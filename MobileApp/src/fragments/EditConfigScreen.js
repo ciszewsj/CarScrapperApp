@@ -4,10 +4,10 @@ import InputText from "../elements/buttons/InputText";
 import SecondaryButton from "../elements/buttons/SecondaryButton";
 import MainButton from "../elements/buttons/MainButton";
 import SelectButton from "../elements/buttons/SelectButton";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import TwoValuesSelect from "../elements/TwoValuesSelect";
 import ProtectedView from "../elements/ProtectedView";
-import { createConfig, getProductsCategories } from "../client/Client";
+import { createConfig, getConfig, getProductsCategories, updateConfig } from "../client/Client";
 import { useContext, useEffect } from "react";
 import { GlobalUserContext } from "../context/GlobalUserContext";
 import { useState } from "react";
@@ -16,24 +16,63 @@ import LoadingRoll from "../elements/LoadingRoll";
 
 let EditConfigScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const [auth, setAuth] = useContext(GlobalUserContext);
   const [form, setForm] = useState({});
   const [responseCreateConfig, setResponseCreateConfig] = useState({});
-  const [responseGetConfig, setResponseGetConfig] = useState({});
+  let [responseGetConfig, setResponseGetConfig] = useState({});
   const [loadingCreateConfig, setLoadingCreateConfig] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
-
+  const [loadingGetCategories, setLoadingGetCategories] = useState(false);
+  const [id, setId] = useState(null);
   console.log(form);
+  useEffect(() => {
+    switch (responseCreateConfig.code) {
+      case Statuses.SUCCESS:
+        setId(responseCreateConfig.body.id);
+        setLoadingCreateConfig(false);
+        break;
+      case Statuses.VALIDATION_ERROR:
+        ToastAndroid.show("Could not save config!", ToastAndroid.SHORT);
+        setLoadingCreateConfig(false);
+        break;
+      case Statuses.FAILURE:
+        ToastAndroid.show("Could not save config!", ToastAndroid.SHORT);
+        setLoadingCreateConfig(false);
+        break;
+      default:
+    }
+  }, [responseCreateConfig]);
 
   useEffect(() => {
-    if (responseCreateConfig.code === Statuses.SUCCESS) {
+    if (responseGetConfig.code === Statuses.SUCCESS) {
 
-
-    } else {
-      ToastAndroid.show("Wrong data !", ToastAndroid.SHORT);
+      if (responseGetConfig.body) {
+        setForm({
+          "name": responseGetConfig.body.name,
+          "priceFrom": responseGetConfig.body.priceFrom,
+          "priceTo": responseGetConfig.body.priceTo,
+          "categoryId": responseGetConfig.body.category ? responseGetConfig.body.category.id : -1,
+        });
+      }
+      setLoadingGetCategories(false);
+    } else if (responseGetConfig.code === Statuses.FAILURE || responseGetConfig.code === Statuses.VALIDATION_ERROR) {
+      setLoadingGetCategories(false);
+      ToastAndroid.show("Could not get information about config!", ToastAndroid.SHORT);
+      navigation.navigate("SettingsScreen");
     }
-    setLoadingCreateConfig(false);
-  }, [responseCreateConfig]);
+  }, [responseGetConfig]);
+
+
+  useEffect(() => {
+    try {
+      const { id } = route && route.params;
+      setId(id);
+      setLoadingGetCategories(true);
+      getConfig(id, auth.token, setResponseGetConfig);
+    } catch (e) {
+    }
+  }, [route]);
 
   return (
     <ProtectedView logged={true}>
@@ -56,33 +95,37 @@ let EditConfigScreen = () => {
           </Text>
           <SelectButton setLoadingCategories={setLoadingCategories} onSelect={(id) => {
             setForm({ ...form, "categoryId": id });
-
-          }} />
+          }} idSelected={form.categoryId}
+          />
           <Text style={{ fontSize: 16 }}>
             Price
           </Text>
-          <TwoValuesSelect leftValue={form.priceFrom} setLeftValue={e => setForm({ ...form, "priceFrom": e })}
-                           rightValue={form.priceTo} setRightValue={e => setForm({ ...form, "priceTo": e })} />
+          <TwoValuesSelect leftValue={form.priceFrom && form.priceFrom.toString()}
+                           setLeftValue={e => setForm({ ...form, "priceFrom": e })}
+                           rightValue={form.priceTo && form.priceTo.toString()}
+                           setRightValue={e => setForm({ ...form, "priceTo": e })} />
         </View>
 
         <View style={{
           flex: 1,
           flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: id == null ? "center" : "space-between",
           width: 300,
-        }}>
+        }}>{id &&
           <SecondaryButton onPress={() => navigation.navigate("SettingsScreen")}>
             Remove
-          </SecondaryButton>
+          </SecondaryButton>}
           <MainButton onPress={() => {
             setLoadingCreateConfig(true);
-            createConfig(auth.token, form, setResponseCreateConfig);
+            id == null ?
+              createConfig(auth.token, form, setResponseCreateConfig) :
+              updateConfig(id, auth.token, form, setResponseCreateConfig);
           }
           }>
             Save
           </MainButton>
         </View>
-        {loadingCreateConfig || loadingCategories && <LoadingRoll />}
+        {(loadingCreateConfig || loadingCategories || loadingGetCategories) && <LoadingRoll />}
       </Background>
     </ProtectedView>
   );

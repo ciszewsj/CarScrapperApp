@@ -5,7 +5,7 @@ import TwoValuesSelect from "./TwoValuesSelect";
 import SecondaryButton from "./buttons/SecondaryButton";
 import ModalElement from "./Modal";
 
-let BoardView = ({ onPress }) => {
+let BoardView = ({ onPressLeft, onPressRight }) => {
   return (
     <ModalElement>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "flex-start", width: 340 }}>
@@ -25,8 +25,8 @@ let BoardView = ({ onPress }) => {
         justifyContent: "space-between",
         width: 300,
       }}>
-        <SecondaryButton onPress={() => onPress(false)}>Save</SecondaryButton>
-        <MainButton onPress={() => onPress(false)}>Filter</MainButton>
+        <SecondaryButton onPress={onPressLeft}>Create</SecondaryButton>
+        <MainButton onPress={onPressRight}>Filter</MainButton>
       </View>
     </ModalElement>
   );

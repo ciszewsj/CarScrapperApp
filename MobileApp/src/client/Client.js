@@ -1,7 +1,6 @@
 import { ResponseObject, Statuses } from "./ResponseObject";
 
-const URL = "http://192.168.191.148:8080";
-
+const URL = "http://192.168.191.148:9000";
 
 export function register(form, setResponse) {
   fetch(URL + "/account/register", {
@@ -15,7 +14,6 @@ export function register(form, setResponse) {
     if (r.status === 200) {
       setResponse(new ResponseObject(Statuses.SUCCESS), null);
     }
-    console.log(r.status);
     setResponse(new ResponseObject(Statuses.FAILURE), null);
 
   }).catch(e => {
@@ -25,25 +23,77 @@ export function register(form, setResponse) {
 
 export function getProductsCategories(token, setResponse) {
   fetch(URL + "/product/categories", {
-    "method": "GET",
+    method: "GET",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: "Bearer " + token,
     },
-  }).then(r => {
-    if (r.status !== 200) {
+  })
+    .then((response) => {
+      if (response.status !== 200) {
+        setResponse(new ResponseObject(Statuses.FAILURE), null);
+      } else {
+        response.json().then((data) => {
+          setResponse(new ResponseObject(Statuses.SUCCESS, data));
+        }).catch((error) => {
+          setResponse(new ResponseObject(Statuses.FAILURE), null);
+        });
+      }
+    })
+    .catch((error) => {
       setResponse(new ResponseObject(Statuses.FAILURE), null);
-    }
-    r.json().then(
-      response => {
-        console.log(response);
-        setResponse(new ResponseObject(Statuses.SUCCESS, response));
-      },
-    );
-  }).catch(e => {
-    setResponse(new ResponseObject(Statuses.FAILURE), null);
-  });
+    });
+}
+
+export function getConfig(id, token, setResponse) {
+  fetch(URL + "/config/" + id, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  })
+    .then((response) => {
+      if (response.status !== 200) {
+        setResponse(new ResponseObject(Statuses.FAILURE), null);
+      } else {
+        response.json().then((data) => {
+          setResponse({ ...new ResponseObject(Statuses.SUCCESS, data) });
+        }).catch((error) => {
+          setResponse(new ResponseObject(Statuses.FAILURE), null);
+        });
+      }
+    })
+    .catch((error) => {
+      setResponse(new ResponseObject(Statuses.FAILURE), null);
+    });
+}
+
+export function getConfigList(token, setResponse) {
+  fetch(URL + "/config", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  })
+    .then((response) => {
+      if (response.status !== 200) {
+        setResponse(new ResponseObject(Statuses.FAILURE), null);
+      } else {
+        response.json().then((data) => {
+          setResponse(new ResponseObject(Statuses.SUCCESS, data));
+        }).catch((error) => {
+          setResponse(new ResponseObject(Statuses.FAILURE), null);
+        });
+      }
+    })
+    .catch((error) => {
+      setResponse(new ResponseObject(Statuses.FAILURE), null);
+    });
 }
 
 export function createConfig(token, form, setResponse) {
@@ -56,16 +106,47 @@ export function createConfig(token, form, setResponse) {
     },
     "body": JSON.stringify(form),
   }).then(r => {
+    console.log("STATUS ??? ", r.status)
     if (r.status !== 200) {
       setResponse(new ResponseObject(Statuses.FAILURE), null);
+    }else {
+      r.json().then(
+        response => {
+          setResponse(new ResponseObject(Statuses.SUCCESS, response));
+        },
+      ).catch(e => {
+        setResponse(new ResponseObject(Statuses.FAILURE), null);
+      });
     }
-    r.json().then(
-      response => {
-        setResponse(new ResponseObject(Statuses.SUCCESS, response));
-      },
-    ).catch(e => {
+  }).catch(e => {
+    setResponse(new ResponseObject(Statuses.FAILURE), null);
+  });
+}
+
+export function updateConfig(id, token, form, setResponse) {
+  fetch(URL + "/config/" + id, {
+    "method": "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    "body": JSON.stringify(form),
+  }).then(r => {
+    console.log("STATUS ??? ", r.status)
+
+    if (r.status !== 200) {
       setResponse(new ResponseObject(Statuses.FAILURE), null);
-    });
+
+    }else {
+      r.json().then(
+        response => {
+          setResponse(new ResponseObject(Statuses.SUCCESS, response));
+        },
+      ).catch(e => {
+        setResponse(new ResponseObject(Statuses.FAILURE), null);
+      });
+    }
   }).catch(e => {
     setResponse(new ResponseObject(Statuses.FAILURE), null);
   });

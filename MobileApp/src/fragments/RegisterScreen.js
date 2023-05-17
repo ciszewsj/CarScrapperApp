@@ -19,12 +19,12 @@ export let RegisterScreen = () => {
   useEffect(() => {
     if (response.code === Statuses.SUCCESS) {
       navigation.navigate("Login");
-    } else {
+    } else if (response.code !== null) {
       ToastAndroid.show("Wrong data !", ToastAndroid.SHORT);
     }
     setLoading(false);
   }, [response]);
-  
+
   return (
     <ProtectedView logged={false}>
       <Background>

@@ -22,16 +22,20 @@ public class ProductConfigController {
 	private final CategoryRepository categoryRepository;
 	private final ProductConfigRepository configRepository;
 
+	public AppUser getUser(String id) {
+		return repository.findById(id).orElseGet(() -> repository.save(createNewAppUser(id)));
+	}
+
 	@GetMapping
 	public List<ProductConfig> productConfigList(@AuthenticationPrincipal CustomAuthenticationObject object) {
-		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
+		AppUser user = getUser(object.getId());
 		return user.getProductConfigList();
 	}
 
 	@GetMapping("/{id}")
 	public ProductConfig getConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                               @PathVariable("id") Long id) {
-		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
+		AppUser user = getUser(object.getId());
 		return user.getProductConfigList().stream().filter(product -> Objects.equals(product.getId(), id)).findFirst().orElseThrow();
 	}
 
@@ -39,7 +43,7 @@ public class ProductConfigController {
 	public ProductConfig createProductConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                                         @RequestBody ProductConfigRequest request) {
 		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();
-		AppUser user = repository.findById(object.getId()).orElseThrow();
+		AppUser user = getUser(object.getId());
 
 		ProductConfig config = new ProductConfig();
 		return updateProductConfig(request, user, category, config);
@@ -49,7 +53,7 @@ public class ProductConfigController {
 	public ProductConfig updateProductConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                                         @RequestBody ProductConfigRequest request,
 	                                         @PathVariable("id") Long id) {
-		AppUser user = repository.findById(object.getId()).orElseThrow();
+		AppUser user = getUser(object.getId());
 		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();
 		ProductConfig config = user.getProductConfigList().stream().filter(productConfig -> Objects.equals(productConfig.getId(), id)).findFirst().orElseThrow();
 
@@ -59,7 +63,7 @@ public class ProductConfigController {
 	@DeleteMapping("/{id}")
 	public void deleteProductConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                                @PathVariable("id") Long id) {
-		AppUser user = repository.findById(object.getId()).orElseThrow();
+		AppUser user = getUser(object.getId());
 		ProductConfig config = user.getProductConfigList().stream().filter(productConfig -> Objects.equals(productConfig.getId(), id)).findFirst().orElseThrow();
 		user.getProductConfigList().remove(config);
 		repository.save(user);

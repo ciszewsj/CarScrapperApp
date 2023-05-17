@@ -6,7 +6,7 @@ import { GlobalUserContext } from "../../context/GlobalUserContext";
 import { Statuses } from "../../client/ResponseObject";
 import { getProductsCategories } from "../../client/Client";
 
-const SelectButton = ({ data, idSelected, onSelect, setLoadingCategories }) => {
+const SelectButton = ({ idSelected, onSelect, setLoadingCategories }) => {
 
 
   const [auth, setAuth] = useContext(GlobalUserContext);
@@ -16,13 +16,13 @@ const SelectButton = ({ data, idSelected, onSelect, setLoadingCategories }) => {
 
 
   useEffect(() => {
-    if (responseCategories.length > idSelected) {
-      setSelected(responseCategories[idSelected]);
+    if (value.length >= idSelected && idSelected > 0) {
+      setSelected(value[idSelected - 1]);
     }
-  }, [responseCategories]);
+  }, [value, idSelected]);
 
   useEffect(() => {
-    if (responseCategories.code != null && responseCategories.code !== Statuses.SUCCESS) {
+    if (responseCategories.code === Statuses.FAILURE) {
       ToastAndroid.show("Could not get categories !", ToastAndroid.SHORT);
     } else if (responseCategories.code === Statuses.SUCCESS) {
       setValue(responseCategories.body && responseCategories.body.length > 0
@@ -30,11 +30,15 @@ const SelectButton = ({ data, idSelected, onSelect, setLoadingCategories }) => {
           return { "key": elem.id, value: elem.name };
         }) : []);
     }
-    setLoadingCategories && setLoadingCategories(false);
+    if (setLoadingCategories !== null && responseCategories.code != null) {
+      setLoadingCategories(false);
+    }
   }, [responseCategories]);
 
   useEffect(() => {
-    setLoadingCategories && setLoadingCategories(true);
+    if (setLoadingCategories !== null) {
+      setLoadingCategories(true);
+    }
     getProductsCategories(auth.token, setResponseCategories);
   }, []);
   return (
@@ -58,10 +62,10 @@ const SelectButton = ({ data, idSelected, onSelect, setLoadingCategories }) => {
         }}
         setSelected={(val) => {
           setSelected(val);
-          let tmp = responseCategories.body && responseCategories.body.find(obj => obj.name === val);
-          onSelect && onSelect(tmp != null ? tmp.id : null);
+          let tmp = value && value.find(obj => obj.value === val);
+          onSelect && onSelect(tmp && tmp.id);
         }}
-        defaultOption={value[idSelected]}
+        defaultOption={selected}
         data={value}
         save="value"
       />

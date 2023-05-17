@@ -80,12 +80,7 @@ let LoginScreen = () => {
               ).catch(e => {
               console.log("Bład");
               ToastAndroid.show("Wrong data !", ToastAndroid.SHORT);
-              // Toast.show({
-              //   type: "success",
-              //   text1: "Hello",
-              //   text2: "This is some something 👋",
-              // });
-              // setLoading(false);
+              setLoading(false);
             });
           }}>
             Login
