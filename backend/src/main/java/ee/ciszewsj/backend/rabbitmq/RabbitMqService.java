@@ -3,6 +3,7 @@ package ee.ciszewsj.backend.rabbitmq;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ciszewsj.backend.database.ProductConfig;
+import ee.ciszewsj.backend.rabbitmq.data.EventConfigRequest;
 import ee.ciszewsj.backend.rabbitmq.data.EventRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,13 @@ public class RabbitMqService {
 		EventRequest eventRequest = EventRequest.builder()
 				.type(EventRequest.Type.GET_CARS_FOR_USER)
 				.user_id(userId)
+				.body(EventConfigRequest
+						.builder()
+						.name(config.getName())
+						.category(config.getCategory().getName())
+						.priceFrom(config.getPriceFrom())
+						.priceTo(config.getPriceTo())
+						.build())
 				.build();
 		rabbitMqClient.sendMessage(mapper.writeValueAsString(eventRequest));
 

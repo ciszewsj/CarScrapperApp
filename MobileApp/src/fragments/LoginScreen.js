@@ -64,15 +64,11 @@ let LoginScreen = () => {
                     token => {
                       setLoading(false);
                       setAuth(globalUsersSettings(token, info.user.email, info.user.displayName,
-                        info.user.tenantId));
+                        info.user.uid));
                     },
                   ).catch(e => {
                       console.log("Bład");
-                      Toast.show({
-                        type: "success",
-                        text1: "Hello",
-                        text2: "This is some something 👋",
-                      });
+                      ToastAndroid.show("Wrong data !", ToastAndroid.SHORT);
                       setLoading(false);
                     },
                   );

@@ -1,7 +1,12 @@
+import random
+import time
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
 
 
 class Scrapper:
@@ -15,19 +20,51 @@ class Scrapper:
         options.add_argument('--user-data-dir=c:/screen1')
         self.driver = webdriver.Chrome(options=options)
 
+    def __create_delay(self):
+        time.sleep(random.randint(self.MIN, self.MAX))
+
+    def __accept_rules(self):
+        driver = self.driver
+        try:
+            button = WebDriverWait(driver, self.MAX_DELAY) \
+                .until(ec.visibility_of_element_located((By.ID, 'onetrust-accept-btn-handler')))
+            print(0)
+            if button.is_displayed():
+                button.click()
+        except Exception as e:
+            print(e)
+
     def off(self):
         self.driver.close()
 
     def get_categories(self) -> []:
         driver = self.driver
-        return [
-            "CATEGORY1",
-            "CATEGORY2",
-            "CATEGORY3",
-        ]
+        driver.get(self.URL)
+        self.__create_delay()
+        print(1)
+        self.__accept_rules()
+        print(2)
+        self.__create_delay()
+        elems = WebDriverWait(driver, self.MAX_DELAY).until(
+            ec.visibility_of_all_elements_located((By.CSS_SELECTOR, "div.maincategories-list")))
+        categories = []
+        print(3)
+        for elem in elems:
+            elem: WebElement = elem
+            cats = elem.find_elements(By.CSS_SELECTOR, "a")
+            for cat in cats:
+                categories.append(cat.text)
+        self.__create_delay()
+        print(4)
+        return categories
 
-    def get_products(self) -> []:
+    def get_products(self, config) -> []:
         driver = self.driver
+        name = config["name"]
+        category = config["category"]
+        price_from = config["priceFrom"]
+        price_to = config["priceTo"]
+        print(name, category, price_from, price_to)
         return [
             {
                 "name": "Volkswagen",

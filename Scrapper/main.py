@@ -27,7 +27,10 @@ def callback(ch, method, properties, body):
             send_to_queue(response_body(message["type"], scrapper.get_categories()))
             return
         elif message["type"] == GET_CARS_FOR_USER:
-            send_to_queue(response_body(message["type"], scrapper.get_products(), message["user_id"]))
+            config = message["body"]
+            car_list: [] = scrapper.get_products(config)
+            if len(car_list) > 0:
+                send_to_queue(response_body(message["type"], car_list, message["user_id"]))
             return
         else:
             print("UNEXPECTED EVENT\n" + body)
