@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static ee.ciszewsj.backend.database.AppUser.createNewAppUser;
 
@@ -26,7 +28,9 @@ public class ProductController {
 	@GetMapping
 	public List<Product> getProducts(@AuthenticationPrincipal CustomAuthenticationObject object) {
 		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
-		return user.getProductList();
+		return user.getProductList().stream()
+				.sorted(Comparator.comparing(Product::getAddedDate))
+				.collect(Collectors.toList());
 	}
 
 	@GetMapping("/{id}")
