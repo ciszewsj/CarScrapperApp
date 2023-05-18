@@ -19,12 +19,13 @@ export let RegisterScreen = () => {
   useEffect(() => {
     if (response.code === Statuses.SUCCESS) {
       navigation.navigate("Login");
-    } else if (response.code !== null) {
+    } else if (response.code === Statuses.VALIDATION_ERROR || response.code === Statuses.FAILURE) {
       ToastAndroid.show("Wrong data !", ToastAndroid.SHORT);
     }
     setLoading(false);
   }, [response]);
 
+  console.log(response);
   return (
     <ProtectedView logged={false}>
       <Background>
@@ -41,19 +42,25 @@ export let RegisterScreen = () => {
           </Text>
           <InputText isSecure={false} value={form.name} onChange={e => {
             setForm({ ...form, "name": e });
-          }} />
+          }} error={response && response.code &&
+            response.code === Statuses.VALIDATION_ERROR &&
+            response.body.name} />
           <Text style={{ fontSize: 16 }}>
             Email
           </Text>
           <InputText isSecure={false} value={form.email} onChange={e => {
             setForm({ ...form, "email": e });
-          }} />
+          }} error={response && response.code &&
+            response.code === Statuses.VALIDATION_ERROR &&
+            response.body.email} />
           <Text style={{ fontSize: 16 }}>
             Password
           </Text>
           <InputText isSecure={true} value={form.password} onChange={e => {
             setForm({ ...form, "password": e });
-          }} />
+          }} error={response && response.code &&
+            response.code === Statuses.VALIDATION_ERROR &&
+            response.body.password} />
         </View>
         <View style={{
           flex: 1,

@@ -11,7 +11,12 @@ export function register(form, setResponse) {
     },
     "body": JSON.stringify(form),
   }).then(r => {
-    if (r.status === 200) {
+    if (r.status === 400) {
+      r.json().then(
+        response => {
+          setResponse(new ResponseObject(Statuses.VALIDATION_ERROR, response));
+        });
+    } else if (r.status === 200) {
       setResponse(new ResponseObject(Statuses.SUCCESS), null);
     }
     setResponse(new ResponseObject(Statuses.FAILURE), null);
