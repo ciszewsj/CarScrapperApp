@@ -9,10 +9,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import MainNavigator from "./src/navigators/MainNavigator";
 import Toast from "react-native-toast-message";
 import MessageService from "./src/elements/MessageService";
+import StorageService from "./src/elements/StorageService";
 
 export default function App() {
   let [globalContext, setGlobalContext] = useState(globalUsersSettings);
-
 
   const Stack = createStackNavigator();
 
@@ -32,6 +32,7 @@ export default function App() {
           }} />
         </Stack.Navigator>
         <MessageService />
+        <StorageService />
       </GlobalUserContext.Provider>
       <Toast />
     </NavigationContainer>
