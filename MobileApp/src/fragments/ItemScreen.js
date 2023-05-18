@@ -51,7 +51,7 @@ let ItemScreen = () => {
       setModal(false);
     }
   }, [route]);
-  console.log(response.body);
+
   return (
     <ProtectedView logged={true}>
       <Background>

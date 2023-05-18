@@ -4,7 +4,7 @@ import InputText from "../elements/buttons/InputText";
 import SecondaryButton from "../elements/buttons/SecondaryButton";
 import MainButton from "../elements/buttons/MainButton";
 import SelectButton from "../elements/buttons/SelectButton";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import TwoValuesSelect from "../elements/TwoValuesSelect";
 import ProtectedView from "../elements/ProtectedView";
 import { createConfig, deleteConfig, getConfig, updateConfig } from "../client/Client";
@@ -30,6 +30,16 @@ let EditConfigScreen = () => {
   const [loadingDeleteCategories, setLoadingDeleteCategories] = useState(false);
 
   const [id, setId] = useState(null);
+  const { setState } = route.params;
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (setState && isFocused) {
+      setState(false);
+      console.log(123);
+    }
+  }, [isFocused]);
+
 
   useEffect(() => {
     switch (responseDeleteConfig.code) {
@@ -86,9 +96,12 @@ let EditConfigScreen = () => {
   useEffect(() => {
     try {
       const { id } = route && route.params;
-      setId(id);
-      setLoadingGetCategories(true);
-      getConfig(id, auth.token, setResponseGetConfig);
+      console.log(id);
+      if (id != null) {
+        setId(id);
+        setLoadingGetCategories(true);
+        getConfig(id, auth.token, setResponseGetConfig);
+      }
     } catch (e) {
     }
   }, [route]);

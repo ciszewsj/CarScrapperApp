@@ -8,7 +8,7 @@ import ProtectedView from "../elements/ProtectedView";
 import { useContext } from "react";
 import { GlobalUserContext } from "../context/GlobalUserContext";
 
-let AccountScreen = () => {
+let AccountScreen = ({}) => {
   const [auth, setAuth] = useContext(GlobalUserContext);
 
   return (

@@ -6,11 +6,12 @@ import { TouchableOpacity } from "react-native";
 import SettingsNavigator from "./SettingsNavigator";
 import AccountScreen from "../fragments/AccountScreen";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 
 let MainNavigator = () => {
   const Tab = createBottomTabNavigator();
   const navigation = useNavigation();
-
+  const [innerStateNavigation, setInnerStateNavigation] = useState(false);
 
   let ColorStyle = () => {
     return (
@@ -34,6 +35,7 @@ let MainNavigator = () => {
       <Tab.Screen
         name="Settings"
         component={SettingsNavigator}
+        initialParams={{ setState: setInnerStateNavigation }}
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ color, size }) => (
@@ -43,12 +45,16 @@ let MainNavigator = () => {
           tabBarBackground: () => <ColorStyle />,
           tabBarStyle: { borderTopWidth: 0 },
 
-          headerRight: () =>
-            <TouchableOpacity style={{ marginRight: 10 }} onPress={() => {
-              navigation.navigate("SettingsScreen", { param1: "wartość parametru" });
-            }}>
-              <Ionicons name="menu-outline" size={30} />
-            </TouchableOpacity>,
+
+          headerRight: () => {
+            if (innerStateNavigation) {
+              return (<TouchableOpacity style={{ marginRight: 10 }} onPress={() => {
+                navigation.navigate("SettingsScreen", { param1: "wartość parametru" });
+              }}>
+                <Ionicons name="menu-outline" size={30} />
+              </TouchableOpacity>);
+            }
+          },
         }}
 
       />
@@ -84,7 +90,6 @@ let MainNavigator = () => {
           headerBackground: () => <ColorStyle />,
           tabBarBackground: () => <ColorStyle />,
           tabBarStyle: { borderTopWidth: 0 },
-
         }}
       />
     </Tab.Navigator>

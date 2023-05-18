@@ -16,11 +16,18 @@ let SettingsScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const isFocused = useIsFocused();
+  const { setState } = route.params;
 
   const [auth, setAuth] = useContext(GlobalUserContext);
   const [modal, setModal] = useState(false);
   const [response, setResponse] = useState({});
   const [loadingGetCategories, setLoadingGetCategories] = useState(false);
+
+  useEffect(() => {
+    if (setState && isFocused) {
+      setState(true);
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     switch (response.code) {

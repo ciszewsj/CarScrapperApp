@@ -10,7 +10,6 @@ import { useContext, useState } from "react";
 import LoadingRoll from "../elements/LoadingRoll";
 import { GlobalUserContext, globalUsersSettings } from "../context/GlobalUserContext";
 import ProtectedView from "../elements/ProtectedView";
-import Toast from "react-native-toast-message";
 
 let LoginScreen = () => {
 
