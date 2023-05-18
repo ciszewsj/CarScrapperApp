@@ -6,6 +6,7 @@ import ee.ciszewsj.backend.database.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class ProductConfigController {
 
 	@PostMapping
 	public ProductConfig createProductConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
-	                                         @RequestBody ProductConfigRequest request) {
+	                                         @RequestBody @Validated ProductConfigRequest request) {
 		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();
 		AppUser user = getUser(object.getId());
 
@@ -54,7 +55,7 @@ public class ProductConfigController {
 
 	@PutMapping("/{id}")
 	public ProductConfig updateProductConfig(@AuthenticationPrincipal CustomAuthenticationObject object,
-	                                         @RequestBody ProductConfigRequest request,
+	                                         @RequestBody @Validated ProductConfigRequest request,
 	                                         @PathVariable("id") Long id) {
 		AppUser user = getUser(object.getId());
 		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow();

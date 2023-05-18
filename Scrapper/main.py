@@ -31,6 +31,7 @@ def callback(ch, method, properties, body):
         elif message["type"] == GET_CARS_FOR_USER:
             config = message["body"]
             car_list: [] = scrapper.get_products(config)
+            print(car_list)
             if len(car_list) > 0:
                 send_to_queue(response_body(message["type"], car_list, message["user_id"]))
             return

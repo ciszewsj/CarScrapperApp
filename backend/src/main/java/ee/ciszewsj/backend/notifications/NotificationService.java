@@ -19,14 +19,13 @@ public class NotificationService {
 	public void sendNotificationToUser(String userId, Product product) {
 		Notification notification = Notification.builder()
 				.setTitle(product.getName())
-				.setBody(product.getCategory().getName() + " - " + product.getPrice())
+				.setBody(product.getCategory().getName() + " - " + product.getPrice() + " PLN")
 				.setImage(product.getImageUrl())
 				.build();
 		log.info("{} - {}", product.getName(), product.getCategory().getName());
 		Message message = Message.builder()
 				.setNotification(notification)
 				.setTopic(userId)
-//				.setToken("eoiZ2QDXSpKh0e03wj04Yh:APA91bEWJV3gVEvgUl-cbxQpqS5wDzybSiovjTo1mux5KscVUmkKjEUWs4ePZMpU7rcWY0md_TObbJnrTXHcNz4D314eIufnoE1q6UgaKISb9vsRUuDufpMqK0kGUmC0oOSxzbgb1dZw")
 				.build();
 		try {
 			firebaseMessaging.send(message);
