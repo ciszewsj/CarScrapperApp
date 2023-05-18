@@ -5,13 +5,11 @@ import ee.ciszewsj.backend.database.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -26,10 +24,19 @@ public class ProductController {
 	private final CategoryRepository categoryRepository;
 
 	@GetMapping
-	public List<Product> getProducts(@AuthenticationPrincipal CustomAuthenticationObject object) {
+	public List<Product> getProducts(@AuthenticationPrincipal CustomAuthenticationObject object,
+	                                 @RequestParam(value = "name", required = false, defaultValue = "") String productName,
+	                                 @RequestParam(value = "category", required = false, defaultValue = "") String categoryName,
+	                                 @RequestParam(value = "priceFrom", required = false) Long priceFrom,
+	                                 @RequestParam(value = "priceTo", required = false) Long priceTo
+	) {
 		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
 		return user.getProductList().stream()
-				.sorted(Comparator.comparing(Product::getAddedDate))
+				.filter(product -> product.getName().toUpperCase(Locale.ROOT).contains(productName.toUpperCase(Locale.ROOT)))
+				.filter(product -> product.getCategory().getName().toUpperCase(Locale.ROOT).contains(categoryName.toUpperCase(Locale.ROOT)))
+				.filter(product -> priceFrom == null || priceFrom <= product.getPrice())
+				.filter(product -> priceTo == null || priceTo >= product.getPrice())
+				.sorted((o1, o2) -> o2.getAddedDate().compareTo(o1.getAddedDate()))
 				.collect(Collectors.toList());
 	}
 

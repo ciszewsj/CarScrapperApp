@@ -23,6 +23,9 @@ let SettingsScreen = () => {
   const [response, setResponse] = useState({});
   const [loadingGetCategories, setLoadingGetCategories] = useState(false);
 
+  const [filters, setFilters] = useState({});
+  const [refresh, setRefresh] = useState();
+
   useEffect(() => {
     if (setState && isFocused) {
       setState(true);
@@ -46,9 +49,9 @@ let SettingsScreen = () => {
     if (isFocused) {
       setModal(false);
       setLoadingGetCategories(true);
-      getConfigList(auth.token, setResponse);
+      getConfigList(auth.token, setResponse, filters);
     }
-  }, [isFocused]);
+  }, [isFocused, refresh]);
 
   useEffect(() => {
     try {
@@ -69,12 +72,13 @@ let SettingsScreen = () => {
                                                                      categoryName={config.category && config.category.name} />)}
         </ScrollView>
         {modal &&
-          <BoardView onPressLeft={() => {
-            navigation.navigate("Edit");
-          }}
-                     onPressRight={() => {
-                       setModal(false);
-                     }}
+          <BoardView
+            filters={filters}
+            setFilters={setFilters}
+            onPressLeft={() => {
+              navigation.navigate("Edit");
+            }}
+            onPressRight={() => setRefresh(!refresh)}
           />}
       </Background>
       {(loadingGetCategories) && <LoadingRoll />}

@@ -10,7 +10,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static ee.ciszewsj.backend.database.AppUser.createNewAppUser;
 
@@ -28,9 +30,14 @@ public class ProductConfigController {
 	}
 
 	@GetMapping
-	public List<ProductConfig> productConfigList(@AuthenticationPrincipal CustomAuthenticationObject object) {
+	public List<ProductConfig> productConfigList(@AuthenticationPrincipal CustomAuthenticationObject object,
+	                                             @RequestParam(value = "name", required = false, defaultValue = "") String productName,
+	                                             @RequestParam(value = "category", required = false, defaultValue = "") String categoryName) {
 		AppUser user = getUser(object.getId());
-		return user.getProductConfigList();
+		return user.getProductConfigList().stream()
+				.filter(config -> config.getName().toUpperCase(Locale.ROOT).contains(productName.toUpperCase(Locale.ROOT)))
+				.filter(config -> config.getCategory().getName().toUpperCase(Locale.ROOT).contains(categoryName.toUpperCase(Locale.ROOT)))
+				.collect(Collectors.toList());
 	}
 
 	@GetMapping("/{id}")

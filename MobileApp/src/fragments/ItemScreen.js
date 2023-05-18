@@ -22,6 +22,9 @@ let ItemScreen = () => {
   const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const [filters, setFilters] = useState({});
+  const [refresh, setRefresh] = useState();
+
   useEffect(() => {
     switch (response.code) {
       case Statuses.SUCCESS:
@@ -39,9 +42,9 @@ let ItemScreen = () => {
     if (isFocused) {
       setModal(false);
       setLoading(true);
-      getMyProductsList(auth.token, setResponse);
+      getMyProductsList(auth.token, setResponse, filters);
     }
-  }, [isFocused]);
+  }, [isFocused, refresh]);
 
   useEffect(() => {
     try {
@@ -65,7 +68,8 @@ let ItemScreen = () => {
                                                                  date={item.addedDate} />)}
 
         </ScrollView>
-        {modal && <BoardView both={false} onPress={setModal} />}
+        {modal && <BoardView both={false} onPress={setModal} setFilters={setFilters} filters={filters}
+                             onPressRight={() => setRefresh(!refresh)} withPrice={true} />}
       </Background>
       {(loading) && <LoadingRoll />}
 

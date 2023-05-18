@@ -97,8 +97,8 @@ export function deleteConfig(id, token, setResponse) {
     });
 }
 
-export function getConfigList(token, setResponse) {
-  fetch(URL + "/config", {
+export function getConfigList(token, setResponse, params) {
+  fetch(URL + "/config" + (params && `?name=${params.name ? params.name : ""}&category=${params.category ? params.category : ""}`), {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -188,8 +188,8 @@ export function updateConfig(id, token, form, setResponse) {
   });
 }
 
-export function getMyProductsList(token, setResponse) {
-  fetch(URL + "/product", {
+export function getMyProductsList(token, setResponse, params) {
+  fetch(URL + "/product" + (params && `?name=${params.name ? params.name : ""}&category=${params.category ? params.category : ""}&priceFrom=${params.priceFrom ? params.priceFrom : ""}&priceTo=${params.priceTo ? params.priceTo : ""}`), {
     method: "GET",
     headers: {
       Accept: "application/json",
