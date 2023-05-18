@@ -2,9 +2,9 @@ package ee.ciszewsj.backend.controller.account;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class AccountController {
 	private final FirebaseAuth firebaseAuth;
 
 	@PostMapping("/register")
-	public void register(@RequestBody @Validated RegisterRequest request) {
+	public void register(@RequestBody @Valid RegisterRequest request) {
 		try {
 			UserRecord.CreateRequest createRequest = new UserRecord.CreateRequest();
 			createRequest.setDisabled(false);

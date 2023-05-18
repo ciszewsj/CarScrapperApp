@@ -128,7 +128,12 @@ export function createConfig(token, form, setResponse) {
     "body": JSON.stringify(form),
   }).then(r => {
     console.log("STATUS ??? ", r.status);
-    if (r.status !== 200) {
+    if (r.status === 400) {
+      r.json().then(
+        response => {
+          setResponse(new ResponseObject(Statuses.VALIDATION_ERROR, response));
+        });
+    } else if (r.status !== 200) {
       setResponse(new ResponseObject(Statuses.FAILURE), null);
     } else {
       r.json().then(
@@ -156,7 +161,12 @@ export function updateConfig(id, token, form, setResponse) {
   }).then(r => {
     console.log("STATUS ??? ", r.status);
 
-    if (r.status !== 200) {
+    if (r.status === 400) {
+      r.json().then(
+        response => {
+          setResponse(new ResponseObject(Statuses.VALIDATION_ERROR, response));
+        });
+    } else if (r.status !== 200) {
       setResponse(new ResponseObject(Statuses.FAILURE), null);
 
     } else {

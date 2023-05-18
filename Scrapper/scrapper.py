@@ -130,8 +130,8 @@ class Scrapper:
             actions = ActionChains(driver)
             actions.move_to_element(elem).perform()
 
-            price_str = elem.find_element(By.XPATH, './/p[@data-testid="ad-price"]').text
-            price_str: str = "".join(filter(str.isdigit, price_str))
+            price_str: str = elem.find_element(By.XPATH, './/p[@data-testid="ad-price"]').text
+            price_str = "".join(filter(str.isdigit, price_str.replace(".", "").replace(",", "")))
             price: int = 0
             try:
                 price = int(price_str)

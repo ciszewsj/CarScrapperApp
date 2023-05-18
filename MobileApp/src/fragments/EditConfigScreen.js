@@ -121,21 +121,35 @@ let EditConfigScreen = () => {
           </Text>
           <InputText isSecure={false} value={form.name} onChange={e => {
             setForm({ ...form, "name": e });
-          }} />
+          }} error={responseCreateConfig && responseCreateConfig.code &&
+            responseCreateConfig.code === Statuses.VALIDATION_ERROR &&
+            responseCreateConfig.body.name
+          } />
           <Text style={{ fontSize: 16 }}>
             Category
           </Text>
           <SelectButton setLoadingCategories={setLoadingCategories} onSelect={(id) => {
             setForm({ ...form, "categoryId": id });
           }} idSelected={form.categoryId}
+                        error={responseCreateConfig && responseCreateConfig.code &&
+                          responseCreateConfig.code === Statuses.VALIDATION_ERROR &&
+                          responseCreateConfig.body.categoryId}
           />
           <Text style={{ fontSize: 16 }}>
             Price
           </Text>
           <TwoValuesSelect leftValue={form.priceFrom && form.priceFrom.toString()}
                            setLeftValue={e => setForm({ ...form, "priceFrom": e })}
+                           leftError={responseCreateConfig && responseCreateConfig.code &&
+                             responseCreateConfig.code === Statuses.VALIDATION_ERROR &&
+                             responseCreateConfig.body.priceFrom
+                           }
                            rightValue={form.priceTo && form.priceTo.toString()}
-                           setRightValue={e => setForm({ ...form, "priceTo": e })} />
+                           setRightValue={e => setForm({ ...form, "priceTo": e })}
+                           rightError={responseCreateConfig && responseCreateConfig.code &&
+                             responseCreateConfig.code === Statuses.VALIDATION_ERROR &&
+                             responseCreateConfig.body.priceTo
+                           } />
         </View>
 
         <View style={{

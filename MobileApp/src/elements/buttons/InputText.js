@@ -1,16 +1,19 @@
 import React from "react";
-import { TextInput, StyleSheet } from "react-native";
+import { TextInput, StyleSheet, Text, View } from "react-native";
 
-const InputText = ({ variant, value, onChange, isSecure, keyboard }) => {
+const InputText = ({ variant, value, onChange, isSecure, keyboard, error }) => {
 
   return (
-    <TextInput
-      style={{ ...styles.input, ...(variant === "small" && styles.small) }}
-      onChangeText={onChange}
-      value={value}
-      secureTextEntry={isSecure}
-      keyboardType={keyboard}
-    />
+    <View>
+      <TextInput
+        style={{ ...styles.input, ...(variant === "small" && styles.small) }}
+        onChangeText={onChange}
+        value={value}
+        secureTextEntry={isSecure}
+        keyboardType={keyboard}
+      />
+      <Text style={{ color: "red", fontSize: 12 }}>{error}</Text>
+    </View>
   );
 };
 

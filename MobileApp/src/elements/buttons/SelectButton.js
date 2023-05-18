@@ -1,12 +1,12 @@
 import React from "react";
-import { ToastAndroid, View } from "react-native";
+import { Text, ToastAndroid, View } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useContext, useEffect, useState } from "react";
 import { GlobalUserContext } from "../../context/GlobalUserContext";
 import { Statuses } from "../../client/ResponseObject";
 import { getProductsCategories } from "../../client/Client";
 
-const SelectButton = ({ idSelected, onSelect, setLoadingCategories }) => {
+const SelectButton = ({ idSelected, onSelect, setLoadingCategories, error }) => {
 
 
   const [auth, setAuth] = useContext(GlobalUserContext);
@@ -73,6 +73,7 @@ const SelectButton = ({ idSelected, onSelect, setLoadingCategories }) => {
         data={value}
         save="value"
       />
+      <Text style={{ color: "red", fontSize: 12 }}>{error}</Text>
     </View>
   );
 };
