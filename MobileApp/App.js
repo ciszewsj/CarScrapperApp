@@ -17,16 +17,6 @@ export default function App() {
 
   const Stack = createStackNavigator();
 
-  useEffect(() => {
-    setInterval(() => {
-      Toast.show({
-        type: "success",
-        text1: "title",
-        text2: "body",
-      });
-    }, 2000);
-  }, []);
-
   return (
     <NavigationContainer>
       <StatusBar translucent={true} hidden={true} />
