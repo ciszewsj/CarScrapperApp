@@ -17,7 +17,7 @@ public class ScrapScheduler {
 	private final UserRepository userRepository;
 	private final RabbitMqService rabbitMqService;
 
-	@Scheduled(fixedRate = 60000)
+	@Scheduled(fixedRate = 60000 * 5)
 	public void scheduleTask() {
 		userRepository
 				.findAll()
@@ -28,7 +28,7 @@ public class ScrapScheduler {
 											try {
 												rabbitMqService
 														.getProductsForConfig(appUser.getId(),
-														config);
+																config);
 											} catch (JsonProcessingException e) {
 												e.printStackTrace();
 											}
