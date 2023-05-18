@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GlobalUserContext, globalUsersSettings } from "./src/context/GlobalUserContext";
 import { StatusBar } from "react-native";
 import LoginScreen from "./src/fragments/LoginScreen";
@@ -10,11 +10,22 @@ import MainNavigator from "./src/navigators/MainNavigator";
 import Toast from "react-native-toast-message";
 import MessageService from "./src/elements/MessageService";
 import StorageService from "./src/elements/StorageService";
+import { customToast } from "./src/elements/buttons/CustomToast";
 
 export default function App() {
   let [globalContext, setGlobalContext] = useState(globalUsersSettings);
 
   const Stack = createStackNavigator();
+
+  useEffect(() => {
+    setInterval(() => {
+      Toast.show({
+        type: "success",
+        text1: "title",
+        text2: "body",
+      });
+    }, 2000);
+  }, []);
 
   return (
     <NavigationContainer>
@@ -34,7 +45,7 @@ export default function App() {
         <MessageService />
         <StorageService />
       </GlobalUserContext.Provider>
-      <Toast />
+      <Toast config={customToast} />
     </NavigationContainer>
   );
 }
