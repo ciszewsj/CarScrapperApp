@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,6 +53,7 @@ public class RabbitMqReceiver {
 						});
 
 			} else if (response.getType().equals(EventResponse.Type.GET_CARS_FOR_USER)) {
+				List<Product> productToSendList = new ArrayList<>();
 				AppUser user = userRepository.findById(response.getUserId()).orElseGet(() -> userRepository.save(createNewAppUser(response.getUserId())));
 				List<ItemRepresentationResponse> items = objectMapper.convertValue(response.getBody(), new TypeReference<>() {
 				});
@@ -73,13 +75,15 @@ public class RabbitMqReceiver {
 									product.setPrice(item.getPrice());
 									product.setImageUrl(item.getImage());
 									user.getProductList().add(product);
-									notificationService.sendNotificationToUser(user.getId(), product);
+									productToSendList.add(product);
 								}
 							} catch (Exception e) {
 								log.error(e.toString());
 							}
 						});
 				userRepository.save(user);
+				productToSendList.forEach(product -> notificationService.sendNotificationToUser(user.getId(), product));
+
 
 			} else {
 				log.error("NOT SUPPORTED TYPE!");
