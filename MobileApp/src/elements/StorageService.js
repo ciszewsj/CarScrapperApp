@@ -13,11 +13,11 @@ let StorageService = () => {
   useEffect(async () => {
     setLoading(true);
 
-    await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    // await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    //
+    // let user = await firebase.auth().currentUser;
 
-    let user = await firebase.auth().currentUser;
-
-    console.log(user)
+    // console.log(user)
 
     // await AsyncStorage.getItem("userData")
     //   .then(async (value) => {

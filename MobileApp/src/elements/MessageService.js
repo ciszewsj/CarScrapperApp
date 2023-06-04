@@ -23,6 +23,7 @@ let MessageService = () => {
         text2: remoteMessage.notification.body,
       });
     });
+    console.log("APP INITED")
   }, []);
 
   useEffect(() => {

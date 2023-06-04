@@ -57,8 +57,10 @@ let LoginScreen = () => {
           </SecondaryButton>
           <MainButton onPress={() => {
             setLoading(true);
+            console.log(form.login, form.password);
             firebase.auth().signInWithEmailAndPassword(form.login, form.password)
               .then(info => {
+                  console.log(info);
                   info.user.getIdToken().then(
                     token => {
                       setLoading(false);
@@ -66,14 +68,17 @@ let LoginScreen = () => {
                         info.user.uid));
                     },
                   ).catch(e => {
-                      console.log("Bład");
+                      console.log("Bład tokenu");
                       ToastAndroid.show("Wrong data !", ToastAndroid.SHORT);
                       setLoading(false);
                     },
                   );
                 },
-              ).catch(e => {
-              console.log("Bład");
+              )
+              .catch(e => {
+              console.log(e);
+              console.log(JSON.stringify(e, ["message", "arguments", "type", "name"]));
+              console.log("Bład całości");
               ToastAndroid.show("Wrong data !", ToastAndroid.SHORT);
               setLoading(false);
             });
