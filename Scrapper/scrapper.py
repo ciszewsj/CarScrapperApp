@@ -2,7 +2,7 @@ import random
 import time
 
 from selenium import webdriver
-from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains, DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
@@ -15,11 +15,16 @@ class Scrapper:
     MIN, MAX = 3, 5
     URL = "https://www.olx.pl/"
 
-    def __init__(self):
-        options = Options()
-        options.add_argument("window-size=1280,800")
-        options.add_argument('--user-data-dir=c:/screen1')
-        self.driver = webdriver.Chrome(options=options)
+    def __init__(self, ip):
+        if ip is None:
+            options = Options()
+            options.add_argument("window-size=1280,800")
+            options.add_argument('--user-data-dir=c:/screen1')
+            self.driver = webdriver.Chrome(options=options)
+        else:
+            chrome_options = Options()
+            chrome_options.add_argument("--disable-dev-shm-usage")
+            self.driver = webdriver.Remote(ip, DesiredCapabilities.CHROME, options=chrome_options)
 
     def __create_delay(self):
         time.sleep(random.randint(self.MIN, self.MAX))

@@ -1,5 +1,6 @@
 import pika
 import json
+import configparser
 
 from scrapper import Scrapper
 
@@ -44,16 +45,19 @@ def callback(ch, method, properties, body):
 scrapper = None
 channel = None
 if __name__ == "__main__":
+    config = configparser.ConfigParser()
+    config.read('config.ini')
     print("SERVER INITED")
     try:
-        scrapper = Scrapper()
-        credentials = pika.PlainCredentials('guest', 'guest')
-        parameters = pika.ConnectionParameters('localhost', 5672, '/', credentials)
+        scrapper = Scrapper(config.get("DEFAULT", "chrome_ip"))
+        credentials = pika.PlainCredentials(config.get("DEFAULT", "user"), config.get("DEFAULT", "passwd"))
+        parameters = pika.ConnectionParameters(config.get("DEFAULT", "rabbit_host"),
+                                               config.getint("DEFAULT", "rabbit_port"), '/', credentials)
         connection = pika.BlockingConnection(parameters)
         channel = connection.channel()
 
         channel.queue_declare(queue=REQUEST_QUEUE)
-        channel.basic_consume(queue=REQUEST_QUEUE, on_message_callback=callback, auto_ack=True)
+        channel.basic_consume(queue=REQUEST_QUEUE, on_message_callback=callback, auto_ack=False)
 
         print("SERVER STARTED")
         channel.start_consuming()
