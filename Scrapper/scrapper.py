@@ -187,7 +187,7 @@ class Scrapper:
     @staticmethod
     def convert_string_to_date(date: str) -> datetime.datetime:
         try:
-            time_string = date.split(" o ")[1]
+            time_string = date.split(" o ")[1].split(":")
             now = datetime.datetime.now()
 
             new_datetime = datetime.datetime(year=now.year, month=now.month, day=now.day, hour=int(time_string[0]),
