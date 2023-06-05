@@ -22,6 +22,7 @@ def send_to_queue(message, queue: str = RESPONSE_QUEUE):
 
 def callback(ch, method, properties, body):
     try:
+        ch.basic_ack(delivery_tag=method.delivery_tag)
         message = json.loads(body)
         print("RECEIVED: ", message)
         if message["type"] == GET_CATEGORY:

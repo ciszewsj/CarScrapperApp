@@ -6,6 +6,7 @@ import ee.ciszewsj.backend.database.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class ProductConfigController {
 	                                             @RequestParam(value = "name", required = false, defaultValue = "") String productName,
 	                                             @RequestParam(value = "category", required = false, defaultValue = "") String categoryName) {
 		AppUser user = getUser(object.getId());
+
 		return user.getProductConfigList().stream()
 				.filter(config -> config.getName().toUpperCase(Locale.ROOT).contains(productName.toUpperCase(Locale.ROOT)))
 				.filter(config -> config.getCategory().getName().toUpperCase(Locale.ROOT).contains(categoryName.toUpperCase(Locale.ROOT)))

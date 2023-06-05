@@ -17,6 +17,7 @@ public class Product {
 	private String name;
 	private String imageUrl;
 	private String url;
+	private String place;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Category category;

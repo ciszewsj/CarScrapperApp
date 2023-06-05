@@ -1,3 +1,4 @@
+import datetime
 import random
 import time
 
@@ -14,6 +15,7 @@ class Scrapper:
     MAX_DELAY = 5
     MIN, MAX = 3, 5
     URL = "https://www.olx.pl/"
+    MAX_TIME_BEFORE = 20
 
     def __init__(self, ip):
         if ip is None:
@@ -66,6 +68,8 @@ class Scrapper:
         price_from = config["priceFrom"]
         price_to = config["priceTo"]
 
+        print(f"STARTED EXECUTION: {name} - {category} - {price_from} - {price_to}")
+
         driver.get(self.URL)
         self.__create_delay()
         self.__accept_rules()
@@ -75,6 +79,7 @@ class Scrapper:
             .until(ec.visibility_of_element_located((By.XPATH, f'.//a[.//span[text() = "{category}"]]')))
         self.__create_delay()
         button.click()
+        print(f"CURRENT URL: {driver.current_url}")
         self.__create_delay()
         button_href = button.get_attribute('href')
         self.__create_delay()
@@ -83,11 +88,13 @@ class Scrapper:
             (By.XPATH, f""".//a[@href='{button_href}'][./strong[text()='Zobacz wszystkie ogłoszenia']]""")))
         self.__create_delay()
         button2.click()
+        print("CHOOSE: 'Zobacz wszystkie ogłoszenia'")
         self.__create_delay()
         name_input = WebDriverWait(driver, 5) \
             .until(ec.visibility_of_element_located((By.ID, "search")))
         self.__create_delay()
         name_input.send_keys(f"{name}")
+        print(f"SEND NAME: {name}")
         self.__create_delay()
         try:
             input_from: WebElement = WebDriverWait(driver, 5) \
@@ -98,9 +105,11 @@ class Scrapper:
             input_from.send_keys(f"{price_from}")
             self.__create_delay()
             input_from.click()
+            print(f"SEND PRICE FROM: {price_from}")
         except Exception as e:
             print("ERROR SET PRICE FROM")
             print(e)
+
         try:
             input_to = WebDriverWait(driver, 5) \
                 .until(ec.visibility_of_element_located((By.NAME, "range-to-input")))
@@ -110,9 +119,11 @@ class Scrapper:
             input_to.send_keys(f"{price_to}")
             self.__create_delay()
             input_to.click()
+            print(f"SEND PRICE TO: {price_to}")
         except Exception as e:
             print("ERROR SET PRICE TO")
             print(e)
+
         try:
             cos = WebDriverWait(driver, 5) \
                 .until(ec.visibility_of_element_located((By.XPATH, ".//div[span[text()='Sortuj:']]")))
@@ -125,16 +136,35 @@ class Scrapper:
             WebDriverWait(driver, 5) \
                 .until(ec.visibility_of_element_located((By.XPATH, './/div[text()="Najnowsze"]'))).click()
             self.__create_delay()
+            print(f"Click Sort")
         except Exception as e:
             print("ERROR SET SORT TYPE")
             print(e)
         elems = WebDriverWait(driver, 5) \
             .until(ec.visibility_of_all_elements_located((By.XPATH, "//div[@data-cy='l-card']")))
         items = []
-        for elem in elems:
-            actions = ActionChains(driver)
-            actions.move_to_element(elem).perform()
+        now = datetime.datetime.now()
 
+        actions = ActionChains(driver)
+        for elem in elems:
+            information: str = elem.find_element(By.CSS_SELECTOR, "p[data-testid='location-date']").text
+            actions.move_to_element(elem).perform()
+            try:
+                print(information)
+                if "Odświeżono" in information:
+                    print("ELEMENT WAS REFRESHED")
+                    continue
+                elif "Dzisiaj" not in information:
+                    print("ELEMENT WAS NOT TODAY")
+                    continue
+                place = information.split("-")[0]
+                date: datetime.datetime = self.convert_string_to_date(information)
+                if date + datetime.timedelta(minutes=self.MAX_TIME_BEFORE) < now:
+                    print(f"ELEMENT TOO OLD {date.hour} - {date.minute} / {now.hour} - {now.minute}")
+                    continue
+            except Exception as e:
+                print(e)
+                continue
             price_str: str = elem.find_element(By.XPATH, './/p[@data-testid="ad-price"]').text
             price_str = "".join(filter(str.isdigit, price_str.replace(".", "").replace(",", "")))
             price: int = 0
@@ -149,6 +179,20 @@ class Scrapper:
             img = img if img[0] != "/" else None
             items.append(
                 {"name": title, "category": category, "price": price, "image": img,
-                 "url": link})
+                 "url": link, "date": date, "place": place})
         self.__create_delay()
+        print(f"FOUND items: {len(items)} FROM {driver.current_url}")
         return items
+
+    @staticmethod
+    def convert_string_to_date(date: str) -> datetime.datetime:
+        try:
+            time_string = date.split(" o ")[1]
+            now = datetime.datetime.now()
+
+            new_datetime = datetime.datetime(year=now.year, month=now.month, day=now.day, hour=int(time_string[0]),
+                                             minute=int(time_string[1]))
+            return new_datetime
+        except Exception as e:
+            print(e)
+            return datetime.datetime(year=1, month=1, day=1)

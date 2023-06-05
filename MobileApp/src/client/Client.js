@@ -1,6 +1,6 @@
 import { ResponseObject, Statuses } from "./ResponseObject";
 
-const URL = "http://192.168.191.148:9000";
+const URL = "http://192.168.191.2:9000";
 
 export function register(form, setResponse) {
   fetch(URL + "/account/register", {
