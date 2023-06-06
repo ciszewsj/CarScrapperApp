@@ -23,6 +23,7 @@ public class Product {
 	private Category category;
 
 	private Date addedDate = new Date();
+	private Date found = new Date();
 	private Date lastSeen = new Date();
 
 	private Long price;

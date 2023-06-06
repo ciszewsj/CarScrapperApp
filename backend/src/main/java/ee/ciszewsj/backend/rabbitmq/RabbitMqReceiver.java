@@ -75,6 +75,7 @@ public class RabbitMqReceiver {
 									product.setPrice(item.getPrice());
 									product.setImageUrl(item.getImage());
 									product.setAddedDate(item.getDate());
+									product.setFound(new Date());
 									product.setPlace(item.getPlace());
 									user.getProductList().add(product);
 									productToSendList.add(product);

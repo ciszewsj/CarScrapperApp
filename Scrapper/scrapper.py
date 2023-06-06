@@ -15,7 +15,7 @@ class Scrapper:
     MAX_DELAY = 5
     MIN, MAX = 3, 5
     URL = "https://www.olx.pl/"
-    MAX_TIME_BEFORE = 20
+    MAX_TIME_BEFORE = 240
 
     def __init__(self, ip):
         if ip is None:
@@ -179,7 +179,7 @@ class Scrapper:
             img = img if img[0] != "/" else None
             items.append(
                 {"name": title, "category": category, "price": price, "image": img,
-                 "url": link, "date": date, "place": place})
+                 "url": link, "date": date.isoformat(), "place": place})
         self.__create_delay()
         print(f"FOUND items: {len(items)} FROM {driver.current_url}")
         return items

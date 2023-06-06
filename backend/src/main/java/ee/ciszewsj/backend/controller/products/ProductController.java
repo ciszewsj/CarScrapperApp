@@ -35,7 +35,7 @@ public class ProductController {
 				.filter(product -> product.getCategory().getName().toUpperCase(Locale.ROOT).contains(categoryName.toUpperCase(Locale.ROOT)))
 				.filter(product -> priceFrom == null || priceFrom <= product.getPrice())
 				.filter(product -> priceTo == null || priceTo >= product.getPrice())
-				.sorted((o1, o2) -> o2.getAddedDate().compareTo(o1.getAddedDate()))
+				.sorted((o1, o2) -> o2.getFound().compareTo(o1.getFound()))
 				.collect(Collectors.toList());
 	}
 
