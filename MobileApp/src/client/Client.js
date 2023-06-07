@@ -189,7 +189,7 @@ export function updateConfig(id, token, form, setResponse) {
 }
 
 export function getMyProductsList(token, setResponse, params) {
-  fetch(URL + "/product" + (params && `?name=${params.name ? params.name : ""}&category=${params.category ? params.category : ""}&priceFrom=${params.priceFrom ? params.priceFrom : ""}&priceTo=${params.priceTo ? params.priceTo : ""}`), {
+  fetch(URL + "/product" + (params && `?name=${params.name ? params.name : ""}&category=${params.category ? params.category : ""}&priceFrom=${params.priceFrom ? params.priceFrom : ""}&priceTo=${params.priceTo ? params.priceTo : ""}${params.maxDate ? "&maxDate=" + params.maxDate : ""}&pageSize=${params.pageSize ? params.pageSize : "10"}&pageNumber=${params.pageNumber ? params.pageNumber : ""}`), {
     method: "GET",
     headers: {
       Accept: "application/json",

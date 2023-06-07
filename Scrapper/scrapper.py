@@ -134,7 +134,7 @@ class Scrapper:
                 .until(ec.visibility_of(find_button)).click()
             self.__create_delay()
             WebDriverWait(driver, 5) \
-                .until(ec.visibility_of_element_located((By.XPATH, './/div[text()="Najnowsze"]'))).click()
+                .until(ec.visibility_of_element_located((By.XPATH, './/div[contains(text(),"Najnowsze")]'))).click()
             self.__create_delay()
             print(f"Click Sort")
         except Exception as e:

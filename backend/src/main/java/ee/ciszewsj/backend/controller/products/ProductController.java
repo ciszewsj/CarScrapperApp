@@ -35,7 +35,9 @@ public class ProductController {
 			@RequestParam(value = "category", defaultValue = "") String categoryName,
 			@RequestParam(value = "priceFrom", required = false) Long priceFrom,
 			@RequestParam(value = "priceTo", required = false) Long priceTo,
-			@RequestParam(value = "maxDate", required = false) Date maxDate
+			@RequestParam(value = "maxDate", required = false) Long maxDate,
+			@RequestParam(value = "pageSize", required = false, defaultValue = "25") Integer pageSize,
+			@RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber
 	) {
 		AppUser user = repository.findById(object.getId())
 				.orElseGet(() -> repository.save(createNewAppUser(object.getId())));
@@ -50,7 +52,7 @@ public class ProductController {
 					priceFrom != null ? priceFrom : Long.MIN_VALUE,
 					priceTo != null ? priceTo : Long.MAX_VALUE);
 			Predicate maxDatePredicate = criteriaBuilder.lessThanOrEqualTo(root.get("found"),
-					maxDate != null ? maxDate : new Date(Long.MAX_VALUE));
+					new Date(maxDate != null ? maxDate : Long.MAX_VALUE));
 			Predicate userIdPredicate = criteriaBuilder.equal(userProductJoin.get("id"), user.getId());
 
 			query.orderBy(criteriaBuilder.desc(root.get("found")));
@@ -58,15 +60,14 @@ public class ProductController {
 			return criteriaBuilder.and(namePredicate, categoryNamePredicate, pricePredicate, maxDatePredicate, userIdPredicate);
 		};
 
-		return productRepository.findAll(productSpecification, PageRequest.of(0, 4));
+		return productRepository.findAll(productSpecification, PageRequest.of(pageNumber, pageSize));
 	}
 
 	@GetMapping("/{id}")
 	public Product getProduct(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                          @PathVariable("id") Long id) {
 		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
-//		return user.getProductList().stream().filter(product -> Objects.equals(product.getId(), id)).findFirst().orElseThrow();
-		return null;
+		return productRepository.findFirstByIdAndUserId(id, user.getId()).orElseThrow();
 	}
 
 	@GetMapping("/categories")

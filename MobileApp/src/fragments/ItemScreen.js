@@ -25,10 +25,25 @@ let ItemScreen = () => {
   const [filters, setFilters] = useState({});
   const [refresh, setRefresh] = useState();
 
+  const [items, setItems] = useState([]);
+
+  const [page, setPage] = useState(0);
+  const [maxPage, setMaxPage] = useState(0);
+  const [maxDate, setMaxDate] = useState(0);
+
+  const [additionalResponse, setAdditionalResponse] = useState({});
+  const [additionalRefresh, setAdditionalRefresh] = useState(false);
+
   useEffect(() => {
     switch (response.code) {
       case Statuses.SUCCESS:
         setLoading(false);
+        setItems(response.body.content);
+        setPage(response.body.number);
+        setMaxPage(response.body.totalPages);
+        if (response.body.content.length > 0) {
+          setMaxDate(response.body.content[0].found);
+        }
         break;
       case  Statuses.FAILURE:
         ToastAndroid.show("Could not get data about configs!", ToastAndroid.SHORT);
@@ -56,6 +71,43 @@ let ItemScreen = () => {
     }
   }, [route]);
 
+  useEffect(() => {
+    switch (additionalResponse.code) {
+      case Statuses.SUCCESS:
+        setAdditionalRefresh(false);
+        setItems([]);
+        let oldItemsIds = items.map(item => item.id);
+        let newItems = additionalResponse.body.content.filter(elem => !oldItemsIds.includes(elem.id));
+        setItems([...items, ...newItems]);
+
+        setPage(additionalResponse.body.number);
+        setMaxPage(additionalResponse.body.totalPages);
+        break;
+      case  Statuses.FAILURE:
+        ToastAndroid.show("Could not get data about configs!", ToastAndroid.SHORT);
+        setAdditionalRefresh(false);
+        break;
+      default:
+    }
+    setAdditionalRefresh(false);
+  }, [additionalResponse]);
+
+
+  const handleScroll = (event) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const isScrolledToBottom = layoutMeasurement.height + contentOffset.y + 100 >= contentSize.height;
+    if (isScrolledToBottom && page + 1 < maxPage) {
+      getMyProductsList(auth.token, setAdditionalResponse, {
+        ...filters,
+        "maxDate": maxDate,
+        "pageNumber": page + 1,
+        "pageSize": 10,
+      });
+      setAdditionalRefresh(true);
+    }
+  };
+
+
   return (<ProtectedView logged={true}>
     <Background>
       <ScrollView
@@ -63,21 +115,22 @@ let ItemScreen = () => {
           refreshing={refresh}
           onRefresh={setRefresh}
         />}
+        onScroll={handleScroll}
 
         style={{ flex: 1, width: "100%" }}>
-        {response.body && response.body.map(item => <ItemLabel key={item.id}
-                                                               name={item.name}
-                                                               url={item.url}
-                                                               imageUrl={item.imageUrl}
-                                                               price={item.price}
-                                                               category={item.category && item.category.name}
-                                                               date={item.addedDate} />)}
+        {items.map(item => <ItemLabel key={item.id}
+                                      name={item.name}
+                                      url={item.url}
+                                      imageUrl={item.imageUrl}
+                                      price={item.price}
+                                      category={item.category && item.category.name}
+                                      date={item.addedDate} />)}
 
       </ScrollView>
       {modal && <BoardView both={false} onPress={setModal} setFilters={setFilters} filters={filters}
                            onPressRight={() => setRefresh(true)} withPrice={true} />}
     </Background>
-    {(loading) && <LoadingRoll />}
+    {(loading || additionalRefresh) && <LoadingRoll />}
 
   </ProtectedView>);
 };
