@@ -1,5 +1,5 @@
 import { Background } from "../elements/Background";
-import { ScrollView, ToastAndroid } from "react-native";
+import { RefreshControl, ScrollView, ToastAndroid } from "react-native";
 import ItemLabel from "../elements/ItemLabel";
 import BoardView from "../elements/BoardView";
 import { useState } from "react";
@@ -36,6 +36,7 @@ let ItemScreen = () => {
         break;
       default:
     }
+    setRefresh(false);
   }, [response]);
 
   useEffect(() => {
@@ -55,25 +56,29 @@ let ItemScreen = () => {
     }
   }, [route]);
 
-  return (
-    <ProtectedView logged={true}>
-      <Background>
-        <ScrollView style={{ flex: 1, width: "100%" }}>
-          {response.body && response.body.map(item => <ItemLabel key={item.id}
-                                                                 name={item.name}
-                                                                 url={item.url}
-                                                                 imageUrl={item.imageUrl}
-                                                                 price={item.price}
-                                                                 category={item.category && item.category.name}
-                                                                 date={item.addedDate} />)}
+  return (<ProtectedView logged={true}>
+    <Background>
+      <ScrollView
+        refreshControl={<RefreshControl
+          refreshing={refresh}
+          onRefresh={setRefresh}
+        />}
 
-        </ScrollView>
-        {modal && <BoardView both={false} onPress={setModal} setFilters={setFilters} filters={filters}
-                             onPressRight={() => setRefresh(!refresh)} withPrice={true} />}
-      </Background>
-      {(loading) && <LoadingRoll />}
+        style={{ flex: 1, width: "100%" }}>
+        {response.body && response.body.map(item => <ItemLabel key={item.id}
+                                                               name={item.name}
+                                                               url={item.url}
+                                                               imageUrl={item.imageUrl}
+                                                               price={item.price}
+                                                               category={item.category && item.category.name}
+                                                               date={item.addedDate} />)}
 
-    </ProtectedView>
-  );
+      </ScrollView>
+      {modal && <BoardView both={false} onPress={setModal} setFilters={setFilters} filters={filters}
+                           onPressRight={() => setRefresh(true)} withPrice={true} />}
+    </Background>
+    {(loading) && <LoadingRoll />}
+
+  </ProtectedView>);
 };
 export default ItemScreen;
