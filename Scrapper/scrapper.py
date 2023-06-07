@@ -166,8 +166,9 @@ class Scrapper:
                 print(e)
                 continue
             price_str: str = elem.find_element(By.XPATH, './/p[@data-testid="ad-price"]').text
-            price_str = "".join(filter(str.isdigit, price_str.replace(".", "").replace(",", "")))
+            price_str = "".join(filter(str.isdigit, price_str.split(".")[0].split(",")[0]))
             price: int = 0
+            print(f"TRY TO CHANGE PRICE : {price_str}")
             try:
                 price = int(price_str)
             except Exception as e:
@@ -182,7 +183,7 @@ class Scrapper:
                  "url": link, "date": date.isoformat(), "place": place})
         self.__create_delay()
         print(f"FOUND items: {len(items)} FROM {driver.current_url}")
-        return items
+        return [item for item in items if price_from <= item["price"] <= price_to]
 
     @staticmethod
     def convert_string_to_date(date: str) -> datetime.datetime:

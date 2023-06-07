@@ -46,8 +46,8 @@ public class ProductController {
 			Join<Product, Category> categoryJoin = root.join("category");
 			Join<Product, AppUser> userProductJoin = root.join("user");
 
-			Predicate namePredicate = criteriaBuilder.like(root.get("name"), "%" + productName + "%");
-			Predicate categoryNamePredicate = criteriaBuilder.like(categoryJoin.get("name"), "%" + categoryName + "%");
+			Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), criteriaBuilder.lower(criteriaBuilder.literal("%" + productName + "%")));
+			Predicate categoryNamePredicate = criteriaBuilder.like(criteriaBuilder.lower(categoryJoin.get("name")), criteriaBuilder.lower(criteriaBuilder.literal("%" + categoryName + "%")));
 			Predicate pricePredicate = criteriaBuilder.between(root.get("price"),
 					priceFrom != null ? priceFrom : Long.MIN_VALUE,
 					priceTo != null ? priceTo : Long.MAX_VALUE);
@@ -55,7 +55,7 @@ public class ProductController {
 					new Date(maxDate != null ? maxDate : Long.MAX_VALUE));
 			Predicate userIdPredicate = criteriaBuilder.equal(userProductJoin.get("id"), user.getId());
 
-			query.orderBy(criteriaBuilder.desc(root.get("found")));
+			query.orderBy(criteriaBuilder.desc(root.get("addedDate")));
 
 			return criteriaBuilder.and(namePredicate, categoryNamePredicate, pricePredicate, maxDatePredicate, userIdPredicate);
 		};
