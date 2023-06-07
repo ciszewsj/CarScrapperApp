@@ -27,6 +27,7 @@ public class RabbitMqReceiver {
 	private final ObjectMapper objectMapper;
 	private final CategoryRepository categoryRepository;
 	private final UserRepository userRepository;
+	private final ProductRepository productRepository;
 	private final NotificationService notificationService;
 
 	@RabbitListener(queues = "#{queue2.name}")
@@ -57,7 +58,7 @@ public class RabbitMqReceiver {
 				AppUser user = userRepository.findById(response.getUserId()).orElseGet(() -> userRepository.save(createNewAppUser(response.getUserId())));
 				List<ItemRepresentationResponse> items = objectMapper.convertValue(response.getBody(), new TypeReference<>() {
 				});
-				List<Product> productList = user.getProductList();
+				List<Product> productList = productRepository.findAllByUserId(user.getId());
 				items.forEach(i -> log.info("{}", i.getUrl()));
 				items.stream().distinct()
 						.filter(item -> item.getUrl() != null)
@@ -77,7 +78,10 @@ public class RabbitMqReceiver {
 									product.setAddedDate(item.getDate());
 									product.setFound(new Date());
 									product.setPlace(item.getPlace());
-									user.getProductList().add(product);
+									product.setUser(user);
+
+									productRepository.save(product);
+
 									productToSendList.add(product);
 								}
 							} catch (Exception e) {

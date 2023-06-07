@@ -27,4 +27,7 @@ public class Product {
 	private Date lastSeen = new Date();
 
 	private Long price;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	private AppUser user;
 }

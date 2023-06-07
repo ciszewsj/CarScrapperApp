@@ -2,15 +2,20 @@ package ee.ciszewsj.backend.controller.products;
 
 import ee.ciszewsj.backend.config.CustomAuthenticationObject;
 import ee.ciszewsj.backend.database.*;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static ee.ciszewsj.backend.database.AppUser.createNewAppUser;
 
@@ -21,29 +26,47 @@ import static ee.ciszewsj.backend.database.AppUser.createNewAppUser;
 public class ProductController {
 	private final UserRepository repository;
 	private final CategoryRepository categoryRepository;
+	private final ProductRepository productRepository;
 
 	@GetMapping
-	public List<Product> getProducts(@AuthenticationPrincipal CustomAuthenticationObject object,
-	                                 @RequestParam(value = "name", required = false, defaultValue = "") String productName,
-	                                 @RequestParam(value = "category", required = false, defaultValue = "") String categoryName,
-	                                 @RequestParam(value = "priceFrom", required = false) Long priceFrom,
-	                                 @RequestParam(value = "priceTo", required = false) Long priceTo
+	public Page<Product> getProducts(
+			@AuthenticationPrincipal CustomAuthenticationObject object,
+			@RequestParam(value = "name", defaultValue = "") String productName,
+			@RequestParam(value = "category", defaultValue = "") String categoryName,
+			@RequestParam(value = "priceFrom", required = false) Long priceFrom,
+			@RequestParam(value = "priceTo", required = false) Long priceTo,
+			@RequestParam(value = "maxDate", required = false) Date maxDate
 	) {
-		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
-		return user.getProductList().stream()
-				.filter(product -> product.getName().toUpperCase(Locale.ROOT).contains(productName.toUpperCase(Locale.ROOT)))
-				.filter(product -> product.getCategory().getName().toUpperCase(Locale.ROOT).contains(categoryName.toUpperCase(Locale.ROOT)))
-				.filter(product -> priceFrom == null || priceFrom <= product.getPrice())
-				.filter(product -> priceTo == null || priceTo >= product.getPrice())
-				.sorted((o1, o2) -> o2.getAddedDate().compareTo(o1.getAddedDate()))
-				.collect(Collectors.toList());
+		AppUser user = repository.findById(object.getId())
+				.orElseGet(() -> repository.save(createNewAppUser(object.getId())));
+
+		Specification<Product> productSpecification = (root, query, criteriaBuilder) -> {
+			Join<Product, Category> categoryJoin = root.join("category");
+			Join<Product, AppUser> userProductJoin = root.join("user");
+
+			Predicate namePredicate = criteriaBuilder.like(root.get("name"), "%" + productName + "%");
+			Predicate categoryNamePredicate = criteriaBuilder.like(categoryJoin.get("name"), "%" + categoryName + "%");
+			Predicate pricePredicate = criteriaBuilder.between(root.get("price"),
+					priceFrom != null ? priceFrom : Long.MIN_VALUE,
+					priceTo != null ? priceTo : Long.MAX_VALUE);
+			Predicate maxDatePredicate = criteriaBuilder.lessThanOrEqualTo(root.get("found"),
+					maxDate != null ? maxDate : new Date(Long.MAX_VALUE));
+			Predicate userIdPredicate = criteriaBuilder.equal(userProductJoin.get("id"), user.getId());
+
+			query.orderBy(criteriaBuilder.desc(root.get("found")));
+
+			return criteriaBuilder.and(namePredicate, categoryNamePredicate, pricePredicate, maxDatePredicate, userIdPredicate);
+		};
+
+		return productRepository.findAll(productSpecification, PageRequest.of(0, 4));
 	}
 
 	@GetMapping("/{id}")
 	public Product getProduct(@AuthenticationPrincipal CustomAuthenticationObject object,
 	                          @PathVariable("id") Long id) {
 		AppUser user = repository.findById(object.getId()).orElseGet(() -> repository.save(createNewAppUser(object.getId())));
-		return user.getProductList().stream().filter(product -> Objects.equals(product.getId(), id)).findFirst().orElseThrow();
+//		return user.getProductList().stream().filter(product -> Objects.equals(product.getId(), id)).findFirst().orElseThrow();
+		return null;
 	}
 
 	@GetMapping("/categories")

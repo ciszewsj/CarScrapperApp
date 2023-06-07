@@ -19,9 +19,9 @@ public class AppUser {
 	@Id
 	private String id;
 
-	@OneToMany(fetch = FetchType.EAGER)
-	@Cascade(CascadeType.ALL)
-	private List<Product> productList = new ArrayList<>();
+//	@OneToMany(fetch = FetchType.EAGER)
+//	@Cascade(CascadeType.ALL)
+//	private List<Product> productList = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
