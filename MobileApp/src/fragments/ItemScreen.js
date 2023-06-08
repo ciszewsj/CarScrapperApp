@@ -42,7 +42,7 @@ let ItemScreen = () => {
         setPage(response.body.number);
         setMaxPage(response.body.totalPages);
         if (response.body.content.length > 0) {
-          setMaxDate(response.body.content[0].found);
+          setMaxDate(Date.now());
         }
         break;
       case  Statuses.FAILURE:
